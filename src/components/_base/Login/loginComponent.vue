@@ -89,7 +89,7 @@ export default {
   background: #ffffff;
   box-shadow: 0px 20px 20px rgba(126, 152, 223, 0.05);
   border-radius: 30px;
-  margin: 10% auto 15% auto;
+  margin: 10% auto 0% auto;
 }
 .title_hello {
   font-family: 'Rubik', sans-serif;
