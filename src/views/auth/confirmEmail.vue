@@ -61,6 +61,8 @@ export default {
 </script>
 <style scoped>
 .ConfirmEmail {
+  height: 100vh;
+  max-height: 100vh;
   background: #e5e5e5;
 }
 .body_cardConfirm {
@@ -68,7 +70,7 @@ export default {
   background: #ffffff;
   box-shadow: 0px 20px 20px rgba(126, 152, 223, 0.05);
   border-radius: 30px;
-  height: 690px;
+  height: 640px;
   margin: 10% auto 10% auto;
 }
 .title_hello {
@@ -97,6 +99,10 @@ export default {
   font-weight: 500;
 }
 @media (max-width: 576px) {
+  .ConfirmEmail {
+    height: auto;
+    max-height: 200vh;
+  }
   .body_cardConfirm {
     width: 100%;
     margin: 26.5% 0;
