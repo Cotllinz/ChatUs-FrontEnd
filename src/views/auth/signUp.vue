@@ -20,6 +20,14 @@ export default {
 </script>
 <style scoped>
 .signUp {
+  height: 100vh;
+  max-height: 100vh;
   background: #e5e5e5;
+}
+@media (max-width: 576px) {
+  .signUp {
+    height: auto;
+    max-height: 200vh;
+  }
 }
 </style>
