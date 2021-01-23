@@ -20,6 +20,14 @@ export default {
 </script>
 <style scoped>
 .LoginPage {
+  height: 100vh;
+  max-height: 200vh;
   background: #e5e5e5;
+}
+@media (max-width: 576px) {
+  .LoginPage {
+    height: auto;
+    max-height: 200vh;
+  }
 }
 </style>
