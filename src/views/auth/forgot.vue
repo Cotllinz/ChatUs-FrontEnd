@@ -84,6 +84,8 @@ export default {
 </script>
 <style scoped>
 .forgot {
+  height: 100vh;
+  max-height: 100vh;
   background: #e5e5e5;
 }
 .body_cardforgot {
@@ -91,8 +93,8 @@ export default {
   background: #ffffff;
   box-shadow: 0px 20px 20px rgba(126, 152, 223, 0.05);
   border-radius: 30px;
-  height: 690px;
-  margin: 10% auto 10% auto;
+  height: 640px;
+  margin: 10% auto 0 auto;
 }
 .title_hello {
   font-family: 'Rubik', sans-serif;
@@ -136,12 +138,26 @@ label {
   font-size: 14px;
 }
 @media (max-width: 576px) {
+  .forgot {
+    height: 105vh;
+    max-height: 200vh;
+  }
   .body_cardforgot {
+    margin-top: 25%;
+    margin-bottom: 10%;
     width: 100%;
-    margin: 26.5% 0;
   }
   .icon_back {
     margin-top: 0;
+  }
+}
+@media (max-width: 375px) {
+  .forgot {
+    height: auto;
+  }
+  .body_cardforgot {
+    margin-bottom: 25%;
+    width: 100%;
   }
 }
 </style>
