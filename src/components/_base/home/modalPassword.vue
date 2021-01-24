@@ -17,7 +17,7 @@
           <b-form-input
             type="password"
             required
-            v-model="form.password"
+            v-model="form.newPassword"
             class="shadow-none"
             placeholder="Type your new password ..."
           ></b-form-input>
@@ -37,6 +37,7 @@
           <b-form-input
             type="password"
             required
+            v-model="confirmPassword"
             class="shadow-none"
             placeholder="Confirm again your password ..."
           ></b-form-input>
@@ -56,18 +57,33 @@
   </b-modal>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'ModalPhone',
   data() {
     return {
       form: {
-        password: ''
-      }
+        newPassword: ''
+      },
+      confirmPassword: ''
     }
   },
+  computed: {
+    ...mapGetters({ Id: 'getId' })
+  },
   methods: {
+    ...mapActions(['updatePassword']),
     sendData() {
-      console.log(this.form)
+      /* Alert Belum Dimasukan */
+      if (this.confirmPassword === this.form.newPassword) {
+        const sendData = {
+          Id: this.Id,
+          Data: this.form
+        }
+        this.updatePassword(sendData)
+      } else {
+        console.log('Tidak Sama')
+      }
     }
   }
 }
