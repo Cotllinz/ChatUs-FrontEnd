@@ -8,22 +8,24 @@
           src="../../../assets/images/icons/back.svg"
           alt="imageBack"
         />
-        <h3 class="mr-auto mt-lg-2 ml-auto">@Cotlinz</h3>
+        <h3 class="mr-auto mt-lg-2 ml-auto">@{{ Account.username }}</h3>
       </div>
       <div class="profile text-center mt-lg-5 pt-lg-2">
         <img
           class="profile_pic"
-          src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
+          :src="`${this.enviro}${Account.image_user}`"
           alt="imageProfile"
         />
-        <h2 class="mt-lg-3">Gloria Mckinney</h2>
-        <p>@wdlam</p>
+        <h2 class="mt-lg-3">
+          {{ Account.fullname ? Account.fullname : Account.username }}
+        </h2>
+        <p>@{{ Account.username }}</p>
       </div>
     </header>
     <main>
       <div class="account mt-lg-5">
         <h2>Account</h2>
-        <h5 class="mt-lg-4">+375(29)9638433</h5>
+        <h5 class="mt-lg-4">{{ Account.phone_number }}</h5>
         <a class="btn_changephone" @click="$bvModal.show('modal_phone')"
           >Tap to change phone number</a
         >
@@ -33,7 +35,7 @@
       <!-- =========================== -->
       <hr class="mr-lg-5" />
       <div class="bio">
-        <h3>I’m Senior Frontend Developer from Microsoft</h3>
+        <h3>{{ Account.bio }}</h3>
         <p>Bio</p>
       </div>
       <div class="settings">
@@ -67,7 +69,7 @@
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Modalphone from './modalPhone'
 import Modalpassword from './modalPassword'
 import ModalAccount from './modalAccount'
@@ -78,8 +80,23 @@ export default {
     Modalpassword,
     ModalAccount
   },
+  data() {
+    return {
+      enviro: process.env.VUE_APP_URL
+    }
+  },
+  computed: {
+    ...mapGetters({ Account: 'getUserData', Myemail: 'getEmail' })
+  },
+  created() {
+    const form = {
+      userEmail: this.Myemail
+    }
+    this.getDataUser(form)
+  },
   methods: {
     ...mapMutations(['changeDisplay']),
+    ...mapActions(['getDataUser']),
     backDisplayhome() {
       this.changeDisplay(0)
     }
