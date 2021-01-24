@@ -15,12 +15,15 @@
     </div>
     <div class="profile text-center mt-lg-5 pt-lg-3">
       <img
+        v-if="Account.image_user"
         class="img_profile"
-        src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
+        :src="`${this.enviro}${Account.image_user}`"
         alt="image_profile"
       />
-      <h2 class="mt-lg-3">Gloria Mckinney</h2>
-      <p>@wdiam</p>
+      <h2 class="mt-lg-3">
+        {{ Account.fullname ? Account.fullname : Account.username }}
+      </h2>
+      <p>@{{ Account.username }}</p>
     </div>
     <div class="d-flex mt-lg-5">
       <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
@@ -42,27 +45,39 @@
       ></b-icon>
     </div>
     <div class="chat_list mt-lg-3">
-      <div class="d-flex mb-lg-3 align-items-center">
+      <div
+        v-for="(items, index) in listRoom"
+        :key="index"
+        style="cursor: pointer;"
+        @click="roomGet(items.room_id)"
+        class="d-flex mb-lg-3 align-items-center"
+      >
         <img
           class="image_friendProfile"
-          src="https://images.unsplash.com/photo-1587628604439-3b9a0aa7a163?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
+          :src="`${enviro}${items.image_user}`"
           alt="image_chatfriend"
         />
         <div class="ml-lg-3 name_tag mt-lg-3">
-          <h2>Theresa Webb</h2>
-          <p class="mt-lg-2">Why did you do that?</p>
+          <h2>{{ items.username }}</h2>
+          <p class="mt-lg-2">{{ items.lastChat.chat_text }}</p>
         </div>
         <div class="desc_time ml-auto mr-lg-2">
-          <h3>15:20</h3>
-          <span class="badge">30+</span>
+          <h3>{{ formatTime(items.lastChat.created_at) }}</h3>
+          <span v-if="items.unreadmessage[0].total > 0" class="badge">{{
+            items.unreadmessage[0].total
+          }}</span>
         </div>
       </div>
     </div>
   </section>
 </template>
 <script>
+import moment from 'moment'
+import { mapActions, mapGetters } from 'vuex'
 import Menus from './menus'
 import Modaladdfriend from './modalAddfriend'
+import io from 'socket.io-client'
+
 export default {
   name: 'sideProfile',
   components: {
@@ -71,16 +86,66 @@ export default {
   },
   data() {
     return {
-      showMenu: 0
+      socket: io('http://localhost:3000'),
+      showMenu: 0,
+      enviro: process.env.VUE_APP_URL,
+      room: '',
+      oldRoom: ''
     }
   },
+  created() {
+    const form = {
+      userEmail: this.Myemail
+    }
+    this.getDataUser(form)
+    this.GetRoomList(this.Id)
+  },
+  computed: {
+    ...mapGetters({
+      Account: 'getUserData',
+      Myemail: 'getEmail',
+      Id: 'getId',
+      listRoom: 'getRoom'
+    })
+  },
   methods: {
+    ...mapActions(['getDataUser', 'GetRoomList', 'getChat']),
     showMenus() {
       if (this.showMenu === 0) {
         this.showMenu = 1
       } else {
         this.showMenu = 0
       }
+    },
+    formatTime(value) {
+      moment.locale('ID')
+      return moment(String(value)).format('LT')
+    },
+    roomGet(room) {
+      if (this.oldRoom) {
+        console.log(`Sudah pernah masuk ke room ${this.oldRoom}`)
+        console.log(`da akan masuk ke room ${room}`)
+        this.socket.emit('changeRoom', {
+          username: this.username,
+          room: room,
+          oldRoom: this.oldRoom
+        })
+        this.oldRoom = room
+      } else {
+        console.log(`Belum Pernah Masuk ke Room mananpun`)
+        console.log(`Dan akan masuk ke room ${room}`)
+        this.socket.emit('joinRoom', {
+          username: this.username,
+          room: room
+        })
+        this.oldRoom = room
+      }
+      const form = {
+        iduser: this.Id,
+        idRoom: room
+      }
+      this.getChat(form)
+      this.GetRoomList(this.Id)
     }
   }
 }
