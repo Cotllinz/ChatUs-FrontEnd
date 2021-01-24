@@ -1,5 +1,11 @@
 <template>
-  <b-modal id="modal_addfriend" centered hide-footer>
+  <b-modal
+    id="modal_addfriend"
+    @show="resetModal"
+    @hidden="resetModal"
+    centered
+    hide-footer
+  >
     <template #modal-title>
       <h4 class="modal_phone ">
         Search new friend
@@ -21,23 +27,30 @@
         <b-form-input
           type="email"
           autocomplete="off"
+          v-model="searchData"
+          @keyup.enter="search"
           class="shadow-none"
           placeholder="Type email your friend ..."
         ></b-form-input>
       </b-input-group>
     </div>
-    <div class="list_search mt-lg-3">
-      <div class="d-flex mb-lg-3 align-items-center">
+    <div v-if="Friend.length > 0" class="list_search mt-lg-3">
+      <div
+        v-for="(items, index) in Friend"
+        :key="index"
+        class="d-flex mb-lg-3 align-items-center"
+      >
         <img
           class="image_friendProfile"
-          src="https://images.unsplash.com/photo-1587628604439-3b9a0aa7a163?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
+          :src="`${enviro}${items.image_user}`"
           alt="image_chatfriend"
         />
         <div class="ml-lg-3 name_tag mt-lg-3">
-          <h2>Theresa Webb</h2>
-          <p class="mt-lg-2">Why did you do that?</p>
+          <h2>{{ items.username }}</h2>
+          <p class="mt-lg-2">{{ items.user_email }}</p>
         </div>
         <button
+          @click="onAdd(items.id_user)"
           type="button"
           class="ml-auto py-lg-2 px-lg-2 btn_addfriend align-items-center"
         >
@@ -51,6 +64,9 @@
         </button>
       </div>
     </div>
+    <div v-if="showAlert === true" class="massage_alert">
+      <h1>{{ this.massage }}</h1>
+    </div>
     <button
       type="button"
       class="mt-3 btn-cancel py-lg-2 w-100"
@@ -61,8 +77,69 @@
   </b-modal>
 </template>
 <script>
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
-  name: 'ModalPhone'
+  name: 'ModalPhone',
+  data() {
+    return {
+      searchData: '',
+      showAlert: false,
+      massage: '',
+      enviro: process.env.VUE_APP_URL
+    }
+  },
+  computed: {
+    ...mapGetters({ Myemail: 'getEmail', Friend: 'getFriend', MyId: 'getId' })
+  },
+  methods: {
+    ...mapActions(['inviteFriend', 'addFriend']),
+    ...mapMutations(['errorSearch']),
+    search() {
+      const form = {
+        myEmail: this.Myemail,
+        friendEmail: this.searchData
+      }
+      this.inviteFriend(form)
+        .then(result => {
+          if (result) {
+            this.showAlert = false
+            this.massage = ''
+          }
+        })
+        .catch(err => {
+          if (err && this.searchData === '') {
+            this.errorSearch()
+            this.showAlert = false
+            this.massage = ''
+          } else if (err) {
+            this.errorSearch()
+            this.showAlert = true
+            this.massage = err.data.massage
+          }
+        })
+    },
+    resetModal() {
+      this.errorSearch()
+      this.searchData = ''
+      this.showAlert = false
+      this.massage = ''
+    },
+    onAdd(event) {
+      /* Perlu ditambahakan alert */
+      const form = {
+        idRequest: this.MyId,
+        idResponse: event
+      }
+      this.addFriend(form)
+        .then(result => {
+          alert(result.data.massage)
+        })
+        .catch(err => {
+          alert(err.data.massage)
+        })
+      console.log(event)
+    }
+  }
 }
 </script>
 <style scoped>
