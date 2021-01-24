@@ -9,6 +9,9 @@
         alt="images_menu"
       />
       <Menus v-if="showMenu === 1" />
+      <!-- Modal Add Friend -->
+      <Modaladdfriend />
+      <!-- ================== -->
     </div>
     <div class="profile text-center mt-lg-5 pt-lg-3">
       <img
@@ -59,10 +62,12 @@
 </template>
 <script>
 import Menus from './menus'
+import Modaladdfriend from './modalAddfriend'
 export default {
   name: 'sideProfile',
   components: {
-    Menus
+    Menus,
+    Modaladdfriend
   },
   data() {
     return {
