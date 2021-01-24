@@ -1,5 +1,5 @@
 <template>
-  <div class="menus_card p-lg-3">
+  <div class="menus_card animate__animated animate__fadeIn p-lg-3">
     <b-col cols="12">
       <button @click="changeDisplaymenu(1)" class="btn_setting mt-lg-2 mb-lg-4">
         <b-icon icon="gear" class="pr-4" variant="white"></b-icon> Settings
