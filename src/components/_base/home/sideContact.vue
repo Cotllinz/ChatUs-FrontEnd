@@ -10,12 +10,15 @@
     </div>
     <div class="profile text-center mt-lg-3 pt-lg-3">
       <img
+        v-if="Account.image_user"
         class="img_profile"
-        src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
+        :src="`${this.enviro}${Account.image_user}`"
         alt="image_profile"
       />
-      <h2 class="mt-lg-3">Gloria Mckinney</h2>
-      <p>@wdiam</p>
+      <h2 class="mt-lg-3">
+        {{ Account.fullname ? Account.fullname : Account.username }}
+      </h2>
+      <p>@{{ Account.username }}</p>
     </div>
     <div class="d-flex mt-lg-5">
       <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
@@ -31,29 +34,55 @@
       </b-input-group>
     </div>
     <div class="chat_list mt-lg-3">
-      <div class="d-flex mb-lg-3 align-items-center">
+      <div
+        v-for="(items, index) in contact"
+        :key="index"
+        class="d-flex mb-lg-3 align-items-center"
+      >
         <img
           class="image_friendProfile"
-          src="https://images.unsplash.com/photo-1587628604439-3b9a0aa7a163?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
+          :src="`${enviro}${items.image_user}`"
           alt="image_chatfriend"
         />
         <div class="ml-lg-3 name_tag mt-lg-3">
-          <h2>Theresa Webb</h2>
-          <p class="mt-lg-2">Online</p>
+          <h2>{{ items.username }}</h2>
+          <p class="mt-lg-2">
+            {{
+              items.login_date === '0000-00-00 00:00:00' ? 'Offline' : 'Online'
+            }}
+          </p>
         </div>
       </div>
     </div>
   </section>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'sideContact',
   data() {
-    return {}
+    return {
+      enviro: process.env.VUE_APP_URL
+    }
+  },
+  computed: {
+    ...mapGetters({
+      Account: 'getUserData',
+      Id: 'getId',
+      Myemail: 'getEmail',
+      contact: 'getContacts'
+    })
+  },
+  created() {
+    const form = {
+      userEmail: this.Myemail
+    }
+    this.getDataUser(form)
+    this.getContact(this.Id)
   },
   methods: {
     ...mapMutations(['changeDisplay']),
+    ...mapActions(['getContact', 'getDataUser']),
     backDisplayhome() {
       this.changeDisplay(0)
     }
