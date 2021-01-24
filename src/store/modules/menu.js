@@ -1,6 +1,6 @@
 export default {
   state: {
-    menu: 1
+    menu: 0
   },
   mutations: {
     changeDisplay(state, payload) {
