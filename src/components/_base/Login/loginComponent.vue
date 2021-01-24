@@ -119,7 +119,7 @@ export default {
   outline: none;
   font-size: 16px;
 }
-.btn_goggle {
+.btn_goggle:hover {
   border: 1px solid #5e81e2;
   color: #5e81e2;
 }
