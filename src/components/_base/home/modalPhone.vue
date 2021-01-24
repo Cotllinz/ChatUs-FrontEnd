@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="modal_phone" centered hide-footer>
+  <b-modal id="modal_phone" @show="GetData" centered hide-footer>
     <template #modal-title>
       <h4 class="modal_phone ">
         Update Your Phone Number
@@ -24,6 +24,7 @@
             type="tel"
             pattern="[0-9]{12}"
             maxlength="12"
+            v-model="form.phoneNumber"
             class="shadow-none"
             placeholder="Type your phone number ..."
           ></b-form-input>
@@ -43,8 +44,37 @@
   </b-modal>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'ModalPhone'
+  name: 'ModalPhone',
+  data() {
+    return {
+      form: {
+        phoneNumber: ''
+      }
+    }
+  },
+  computed: {
+    ...mapGetters({ Id: 'getId', Myemail: 'getEmail' })
+  },
+  methods: {
+    ...mapActions(['updatePhone', 'getDataUser']),
+    sendData() {
+      const setData = {
+        Id: this.Id,
+        form: this.form
+      }
+      this.updatePhone(setData)
+    },
+    GetData() {
+      const form = {
+        userEmail: this.Myemail
+      }
+      this.getDataUser(form).then(result => {
+        this.form.phoneNumber = result.data.data[0].phone_number
+      })
+    }
+  }
 }
 </script>
 <style scoped>
