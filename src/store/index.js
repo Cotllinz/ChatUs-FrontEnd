@@ -3,6 +3,9 @@ import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import Auth from './modules/auth'
 import menu from './modules/menu'
+import home from './modules/home'
+import contact from './modules/contact'
+import userAcc from './modules/user'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {},
@@ -10,7 +13,10 @@ export default new Vuex.Store({
   actions: {},
   modules: {
     Auth,
-    menu
+    menu,
+    home,
+    contact,
+    userAcc
   },
   plugins: [
     createPersistedState({
