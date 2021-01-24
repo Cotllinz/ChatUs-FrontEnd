@@ -1,5 +1,5 @@
 <template>
-  <div class="chatlog">
+  <div class="chatlog animate__animated animate__fadeIn">
     <header>
       <div class="d-flex ml-lg-3 mt-lg-1 align-items-center">
         <img
@@ -23,88 +23,26 @@
       </div>
     </header>
     <main>
-      <div class="chat pt-lg-1">
-        <div class="left_chat d-flex ml-lg-3 mt-lg-3 align-items-end">
+      <div v-for="(items, index) in Chat" :key="index" class="chat pt-lg-1">
+        <div
+          v-if="items.idChat_sender !== Id"
+          class="left_chat d-flex ml-lg-3 mt-lg-3 align-items-end"
+        >
           <img
             class="photo_chat"
             src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
             alt="left_chat"
           />
           <p class="ml-lg-2">
-            Hi, son, how are you doing? Today, my father and I went to buy a
-            car, bought a cool car.
+            {{ items.chat_text }}
           </p>
         </div>
-        <div class="right_chat d-flex mr-lg-3 mt-lg-4">
+        <div
+          v-if="items.idChat_sender === Id && items.idChat_recaiver !== Id"
+          class="right_chat d-flex mr-lg-3 mt-lg-4"
+        >
           <p class="ml-auto">
-            Hi, son, how are you doing? Today, my father and I went to buy a
-            car, bought a cool car.
-          </p>
-          <img
-            class="photo_chat ml-2"
-            src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
-            alt="left_chat"
-          />
-        </div>
-        <div class="left_chat d-flex ml-lg-3 mt-lg-3 align-items-end">
-          <img
-            class="photo_chat"
-            src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
-            alt="left_chat"
-          />
-          <p class="ml-lg-2">
-            Hi, son, how are you doing? Today, my father and I went to buy a
-            car, bought a cool car.
-          </p>
-        </div>
-        <div class="left_chat d-flex ml-lg-3 mt-lg-3 align-items-end">
-          <img
-            class="photo_chat"
-            src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
-            alt="left_chat"
-          />
-          <p class="ml-lg-2">
-            Hi, son, how are you doing? Today, my father and I went to buy a
-            car, bought a cool car.
-          </p>
-        </div>
-        <div class="right_chat d-flex mr-lg-3 mt-lg-4">
-          <p class="ml-auto">
-            Hi, son, how are you doing? Today, my father and I went to buy a
-            car, bought a cool car.
-          </p>
-          <img
-            class="photo_chat ml-2"
-            src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
-            alt="left_chat"
-          />
-        </div>
-        <div class="right_chat d-flex mr-lg-3 mt-lg-4">
-          <p class="ml-auto">
-            Hi, son, how are you doing? Today, my father and I went to buy a
-            car, bought a cool car.
-          </p>
-          <img
-            class="photo_chat ml-2"
-            src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
-            alt="left_chat"
-          />
-        </div>
-        <div class="left_chat d-flex ml-lg-3 mt-lg-3 align-items-end">
-          <img
-            class="photo_chat"
-            src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
-            alt="left_chat"
-          />
-          <p class="ml-lg-2">
-            Hi, son, how are you doing? Today, my father and I went to buy a
-            car, bought a cool car.
-          </p>
-        </div>
-        <div class="right_chat d-flex mr-lg-3 mt-lg-4">
-          <p class="ml-auto">
-            Hi, son, how are you doing? Today, my father and I went to buy a
-            car, bought a cool car.
+            {{ items.chat_text }}
           </p>
           <img
             class="photo_chat ml-2"
@@ -136,11 +74,15 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import Modalprofilechat from './modalProfilechat'
 export default {
   name: 'RoomChat',
   components: {
     Modalprofilechat
+  },
+  computed: {
+    ...mapGetters({ Chat: 'getChat', Id: 'getId' })
   }
 }
 </script>
