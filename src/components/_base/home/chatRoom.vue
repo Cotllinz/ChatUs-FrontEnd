@@ -3,10 +3,14 @@
     <header>
       <div class="d-flex ml-lg-3 mt-lg-1 align-items-center">
         <img
+          @click="$bvModal.show('modal_showprofile')"
           class="image_profilechat"
           src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
           alt=""
         />
+        <!-- Modal Profile Chat -->
+        <Modalprofilechat />
+        <!-- ====================== -->
         <div class="chatname ml-lg-3 mt-lg-4">
           <h3>Mother</h3>
           <p>Online</p>
@@ -132,8 +136,12 @@
   </div>
 </template>
 <script>
+import Modalprofilechat from './modalProfilechat'
 export default {
-  name: 'RoomChat'
+  name: 'RoomChat',
+  components: {
+    Modalprofilechat
+  }
 }
 </script>
 <style scoped>
@@ -193,6 +201,7 @@ main::-webkit-scrollbar-thumb {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 .image_profilechat {
+  cursor: pointer;
   width: 50px;
   height: 50px;
   border-radius: 20px;
