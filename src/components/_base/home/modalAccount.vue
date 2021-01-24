@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="modal_account" centered hide-footer>
+  <b-modal @show="GetData" id="modal_account" centered hide-footer>
     <template #modal-title>
       <h4 class="modal_phone ">
         Edit your profile
@@ -40,6 +40,7 @@
           <b-form-input
             type="text"
             maxlength="10"
+            v-model="form.userName"
             autocomplete="off"
             required
             class="shadow-none"
@@ -62,6 +63,7 @@
             type="text"
             required
             autocomplete="off"
+            v-model="form.fullName"
             maxlength="20"
             class="shadow-none"
             placeholder="Type your fullname ..."
@@ -83,6 +85,7 @@
             type="text"
             required
             autocomplete="off"
+            v-model="form.bioGrap"
             class="shadow-none"
             placeholder="Type your bio ..."
           ></b-form-input>
@@ -102,20 +105,56 @@
   </b-modal>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'ModalPhone',
   data() {
     return {
-      url: null
+      url: null,
+      form: {
+        fullName: '',
+        userName: '',
+        bioGrap: '',
+        userImage: ''
+      }
     }
   },
+  computed: {
+    ...mapGetters({ Myemail: 'getEmail' })
+  },
   methods: {
+    ...mapActions(['updateUser', 'getDataUser']),
     chooseFiles() {
       document.getElementById('fileUpload').click()
     },
     onFileChange(e) {
       const file = e.target.files[0]
+      this.form.userImage = file
       this.url = URL.createObjectURL(file)
+    },
+    sendData() {
+      /* Alert Ditambahkan */
+      const { fullName, userName, bioGrap, userImage } = this.form
+      const dataSendAccount = new FormData()
+      dataSendAccount.append('fullName', fullName)
+      dataSendAccount.append('userName', userName)
+      dataSendAccount.append('bioGrap', bioGrap)
+      dataSendAccount.append('userImage', userImage)
+      const updateAccout = {
+        form: dataSendAccount,
+        email: this.Myemail
+      }
+      this.updateUser(updateAccout)
+    },
+    GetData() {
+      const form = {
+        userEmail: this.Myemail
+      }
+      this.getDataUser(form).then(result => {
+        this.form.fullName = result.data.data[0].fullname
+        this.form.userName = result.data.data[0].username
+        this.form.bioGrap = result.data.data[0].bio
+      })
     }
   }
 }
