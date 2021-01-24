@@ -1,24 +1,26 @@
 <template>
   <div class="menus_card p-lg-3">
     <b-col cols="12">
-      <button class="btn_setting mt-lg-2 mb-lg-4">
+      <button @click="changeDisplaymenu(1)" class="btn_setting mt-lg-2 mb-lg-4">
         <b-icon icon="gear" class="pr-4" variant="white"></b-icon> Settings
       </button>
     </b-col>
-
     <b-col cols="12">
-      <button class="btn_account mb-lg-4">
+      <button @click="changeDisplaymenu(2)" class="btn_account mb-lg-4">
         <b-icon icon="person" class="pr-4" variant="white"></b-icon> Contacts
       </button>
     </b-col>
     <b-col cols="12">
-      <button class="btn_invitefriend mb-lg-4">
+      <button
+        @click="$bvModal.show('modal_addfriend')"
+        class="btn_invitefriend mb-lg-4"
+      >
         <b-icon icon="person-plus" class="pr-4" variant="white"></b-icon> Invite
         Friends
       </button>
     </b-col>
     <b-col cols="12">
-      <button class="btn_chatusfaq">
+      <button @click="changeDisplaymenu(4)" class="btn_chatusfaq">
         <b-icon icon="question-circle" class="pr-4" variant="white"></b-icon>
         Chat.us FAQ
       </button>
@@ -26,8 +28,15 @@
   </div>
 </template>
 <script>
+import { mapMutations } from 'vuex'
 export default {
-  name: 'Menus'
+  name: 'Menus',
+  methods: {
+    ...mapMutations(['changeDisplay']),
+    changeDisplaymenu(event) {
+      this.changeDisplay(event)
+    }
+  }
 }
 </script>
 <style scoped>
