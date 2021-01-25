@@ -20,21 +20,31 @@
       </button>
     </b-col>
     <b-col cols="12">
-      <button @click="changeDisplaymenu(4)" class="btn_chatusfaq">
+      <button @click="changeDisplaymenu(4)" class="btn_chatusfaq mb-lg-4">
         <b-icon icon="question-circle" class="pr-4" variant="white"></b-icon>
         Chat.us FAQ
+      </button>
+    </b-col>
+    <b-col cols="12">
+      <button @click="handleLogout" class="btn_logout">
+        <b-icon icon="door-closed-fill" class="pr-4" variant="white"></b-icon>
+        Log Out
       </button>
     </b-col>
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   name: 'Menus',
   methods: {
     ...mapMutations(['changeDisplay']),
+    ...mapActions(['logout']),
     changeDisplaymenu(event) {
       this.changeDisplay(event)
+    },
+    handleLogout() {
+      this.logout()
     }
   }
 }
@@ -44,7 +54,7 @@ export default {
   top: 55px;
   right: 25px;
   width: 210px;
-  height: 230px;
+  height: 270px;
   z-index: 1;
   background: #7e98df;
   border-radius: 35px 10px 35px 35px;
@@ -53,7 +63,8 @@ export default {
 .btn_setting,
 .btn_account,
 .btn_invitefriend,
-.btn_chatusfaq {
+.btn_chatusfaq,
+.btn_logout {
   outline: none;
   width: 100%;
   border: none;
@@ -64,7 +75,8 @@ export default {
 }
 .btn_setting,
 .btn_account,
-.btn_invitefriend {
+.btn_invitefriend,
+.btn_chatusfaq {
   border-bottom: 1px solid;
 }
 </style>
