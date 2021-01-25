@@ -5,15 +5,17 @@
         <img
           @click="$bvModal.show('modal_showprofile')"
           class="image_profilechat"
-          src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
+          :src="`${enviro}${Droom.imageUser}`"
           alt=""
         />
         <!-- Modal Profile Chat -->
         <Modalprofilechat />
         <!-- ====================== -->
         <div class="chatname ml-lg-3 mt-lg-4">
-          <h3>Mother</h3>
-          <p>Online</p>
+          <h3>{{ Droom.userName }}</h3>
+          <p>
+            {{ Droom.login === '0000-00-00 00:00:00' ? 'Offline' : 'Online' }}
+          </p>
         </div>
         <img
           class="ml-auto img_icon mt-lg-3 mr-lg-3"
@@ -26,27 +28,23 @@
       <div v-for="(items, index) in Chat" :key="index" class="chat pt-lg-1">
         <div
           v-if="items.idChat_sender !== Id"
-          class="left_chat d-flex ml-lg-3 mt-lg-3 align-items-end"
+          class="left_chat mb-lg-3 d-flex ml-lg-3 mt-lg-3 align-items-end"
         >
           <img
             class="photo_chat"
-            src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
+            :src="`${enviro}${Droom.imageUser}`"
             alt="left_chat"
           />
-          <p class="ml-lg-2">
-            {{ items.chat_text }}
-          </p>
+          <p class="ml-lg-2">{{ items.chat_text }}</p>
         </div>
         <div
           v-if="items.idChat_sender === Id && items.idChat_recaiver !== Id"
           class="right_chat d-flex mr-lg-3 mt-lg-4"
         >
-          <p class="ml-auto">
-            {{ items.chat_text }}
-          </p>
+          <p class="ml-auto">{{ items.chat_text }}</p>
           <img
+            :src="`${enviro}${Account.image_user}`"
             class="photo_chat ml-2"
-            src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
             alt="left_chat"
           />
         </div>
@@ -61,12 +59,14 @@
           <b-input-group-text class="emoticons">
             <b-icon icon="emoji-laughing-fill" aria-hidden="true"></b-icon
           ></b-input-group-text>
-          <b-input-group-text class="send_msg">
+          <b-input-group-text @click="sendMessage" class="send_msg">
             <b-icon icon="arrow-right-square-fill" aria-hidden="true"></b-icon
           ></b-input-group-text>
         </template>
         <b-form-input
           class="shadow-none"
+          v-model="message"
+          @keyup.enter="sendMessage"
           placeholder="Type your message..."
         ></b-form-input>
       </b-input-group>
@@ -74,15 +74,54 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Modalprofilechat from './modalProfilechat'
+import io from 'socket.io-client'
 export default {
   name: 'RoomChat',
   components: {
     Modalprofilechat
   },
+  data() {
+    return {
+      socket: io('http://localhost:3000'),
+      enviro: process.env.VUE_APP_URL,
+      message: ''
+    }
+  },
+  created() {
+    const form = {
+      userEmail: this.Myemail
+    }
+    this.getDataUser(form)
+  },
   computed: {
-    ...mapGetters({ Chat: 'getChat', Id: 'getId' })
+    ...mapGetters({
+      Chat: 'getChat',
+      Id: 'getId',
+      Account: 'getUserData',
+      Myemail: 'getEmail',
+      Droom: 'getroomDisplay'
+    })
+  },
+  methods: {
+    ...mapActions(['getDataUser', 'postChat']),
+    sendMessage() {
+      const setDataToDatabase = {
+        idSender: this.Id,
+        idRecaiver: this.Droom.id,
+        chatText: this.message
+      }
+      const setDataToSocket = {
+        room: this.Droom.rooms,
+        idChat_sender: this.Id,
+        idChat_recaiver: this.Droom.id,
+        chat_text: this.message
+      }
+      this.socket.emit('roomMessage', setDataToSocket)
+      this.postChat(setDataToDatabase)
+      this.message = ''
+    }
   }
 }
 </script>
