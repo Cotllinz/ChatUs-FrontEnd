@@ -1,11 +1,17 @@
 <template>
-  <b-modal @show="GetData" id="modal_account" centered hide-footer>
+  <b-modal
+    @show="GetData"
+    @hidden="buildingNewData"
+    id="modal_account"
+    centered
+    hide-footer
+  >
     <template #modal-title>
       <h4 class="modal_phone ">
         Edit your profile
       </h4>
     </template>
-    <b-form @submit.prevent="sendData">
+    <b-form @submit.stop.prevent="sendData">
       <div class="text-center mt-lg-4 mb-lg-3">
         <img
           v-if="url"
@@ -145,6 +151,9 @@ export default {
         email: this.Myemail
       }
       this.updateUser(updateAccout)
+      this.$nextTick(() => {
+        this.$bvModal.hide('modal_account')
+      })
     },
     GetData() {
       const form = {
@@ -155,6 +164,12 @@ export default {
         this.form.userName = result.data.data[0].username
         this.form.bioGrap = result.data.data[0].bio
       })
+    },
+    buildingNewData() {
+      const form = {
+        userEmail: this.Myemail
+      }
+      this.getDataUser(form)
     }
   }
 }
