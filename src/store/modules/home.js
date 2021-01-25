@@ -2,7 +2,8 @@ import axios from 'axios'
 export default {
   state: {
     roomList: [],
-    chat: []
+    chat: [],
+    roomDisplay: []
   },
   mutations: {
     setListroom(state, payload) {
@@ -10,6 +11,12 @@ export default {
     },
     chat(state, payload) {
       state.chat = payload.data
+    },
+    setRoomDisplay(state, payload) {
+      state.roomDisplay = payload
+    },
+    setSocketchat(state, payload) {
+      state.chat.push(payload)
     }
   },
   actions: {
@@ -27,13 +34,23 @@ export default {
       })
     },
     getChat(context, payload) {
-      console.log(payload)
       return new Promise((resolve, reject) => {
         axios
           .post(`${process.env.VUE_APP_URL}chat/getChat`, payload)
           .then(result => {
-            console.log(result)
             context.commit('chat', result.data)
+            resolve(result)
+          })
+          .catch(err => {
+            reject(err.response)
+          })
+      })
+    },
+    postChat(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.VUE_APP_URL}chat/chating`, payload)
+          .then(result => {
             resolve(result)
           })
           .catch(err => {
@@ -48,6 +65,9 @@ export default {
     },
     getChat(state) {
       return state.chat
+    },
+    getroomDisplay(state) {
+      return state.roomDisplay
     }
   }
 }
