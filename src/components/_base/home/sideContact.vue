@@ -33,7 +33,39 @@
         ></b-form-input>
       </b-input-group>
     </div>
+    <div class="chat_req mt-lg-3">
+      <h3>Friend Request</h3>
+      <div
+        v-for="(item, index) in reqFriend"
+        :key="index"
+        class="d-flex mb-lg-3 align-items-center"
+      >
+        <img
+          class="image_friendProfile"
+          :src="`${enviro}${item.image_user}`"
+          alt="image_chatfriend"
+        />
+        <div class="ml-lg-3 name_tag mt-lg-3">
+          <h2>{{ item.username }}</h2>
+          <p class="mt-lg-2">
+            {{
+              item.login_date === '0000-00-00 00:00:00' ? 'Offline' : 'Online'
+            }}
+          </p>
+        </div>
+        <div class="ml-auto mr-lg-2">
+          <span @click="handleAcceptFriend(item)" class="badge"
+            ><b-icon
+              icon="person-check-fill"
+              font-scale="2"
+              aria-hidden="true"
+            ></b-icon
+          ></span>
+        </div>
+      </div>
+    </div>
     <div class="chat_list mt-lg-3">
+      <h3>Friend Contact</h3>
       <div
         v-for="(items, index) in contact"
         :key="index"
@@ -51,6 +83,15 @@
               items.login_date === '0000-00-00 00:00:00' ? 'Offline' : 'Online'
             }}
           </p>
+        </div>
+        <div class="ml-auto mr-lg-2">
+          <span @click="handleRemoveFriend(items.id)" class="badge"
+            ><b-icon
+              icon="trash2-fill"
+              font-scale="2"
+              aria-hidden="true"
+            ></b-icon
+          ></span>
         </div>
       </div>
     </div>
@@ -70,7 +111,8 @@ export default {
       Account: 'getUserData',
       Id: 'getId',
       Myemail: 'getEmail',
-      contact: 'getContacts'
+      contact: 'getContacts',
+      reqFriend: 'getReqFriend'
     })
   },
   created() {
@@ -79,12 +121,50 @@ export default {
     }
     this.getDataUser(form)
     this.getContact(this.Id)
+    this.getFriendRequest(this.Id)
+      .then(() => {})
+      .catch(err => {
+        if (err) {
+          this.removeListReq()
+        }
+      })
   },
   methods: {
-    ...mapMutations(['changeDisplay']),
-    ...mapActions(['getContact', 'getDataUser']),
+    ...mapMutations(['changeDisplay', 'removeListReq']),
+    ...mapActions([
+      'getContact',
+      'getDataUser',
+      'removeFriend',
+      'getFriendRequest',
+      'AcceptFriend'
+    ]),
     backDisplayhome() {
       this.changeDisplay(0)
+    },
+    handleRemoveFriend(event) {
+      /* Alert Ditambahkan */
+      this.removeFriend(event).then(() => {
+        this.getContact(this.Id)
+      })
+    },
+    handleAcceptFriend(event) {
+      const setAccept = {
+        idRequest: this.Id,
+        idResponse: event.user_idRequest
+      }
+      this.AcceptFriend(setAccept)
+        .then(result => {
+          if (result) {
+            this.removeListReq()
+            this.getFriendRequest(this.Id)
+            this.getContact(this.Id)
+          }
+        })
+        .catch(err => {
+          if (err.data.massage === 'You Dont Have a Friend Request') {
+            this.removeListReq()
+          }
+        })
     }
   }
 }
@@ -104,22 +184,33 @@ export default {
 .profile p {
   font-family: 'Rubik', sans-serif;
 }
-.chat_list {
-  height: 51.5vh;
+
+.chat_list,
+.chat_req {
+  height: 24vh;
   max-height: 100vh;
   overflow-y: scroll;
   overflow-x: hidden;
 }
-.chat_list::-webkit-scrollbar {
+.chat_list h3,
+.chat_req h3 {
+  font-family: 'Rubik', sans-serif;
+  font-size: 25px;
+  color: #527ef7;
+}
+.chat_list::-webkit-scrollbar,
+.chat_req::-webkit-scrollbar {
   width: 5px;
 }
-.chat_list::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+.chat_list::-webkit-scrollbar-track,
+.chat_req::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(8, 50, 235, 0.3);
   border-radius: 10px;
 }
-.chat_list::-webkit-scrollbar-thumb {
+.chat_list::-webkit-scrollbar-thumb,
+.chat_req::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 6px rgba(31, 45, 245, 0.5);
 }
 .img_profile {
   width: 100px;
@@ -171,17 +262,19 @@ input[type='text'] {
 .name_tag p {
   color: #7e98df;
 }
-.desc_time h3 {
-  color: #848484;
-}
+
 .badge {
-  width: 25px;
+  cursor: pointer;
+  width: 35px;
   font-size: 10px;
   padding-top: 8px;
   padding-left: 4px;
-  height: 25px;
+  height: 35px;
   border-radius: 50%;
   background: #7e98df;
   color: white;
+}
+.badge:hover {
+  background: #527ef7;
 }
 </style>
