@@ -1,11 +1,17 @@
 <template>
-  <b-modal id="modal_phone" @show="GetData" centered hide-footer>
+  <b-modal
+    id="modal_phone"
+    @show="GetData"
+    @hidden="buildingNewData"
+    centered
+    hide-footer
+  >
     <template #modal-title>
       <h4 class="modal_phone ">
         Update Your Phone Number
       </h4>
     </template>
-    <b-form @submit.prevent="sendData">
+    <b-form @submit.stop.prevent="sendData">
       <div class="form_phone">
         <label for="phone">Phone Number</label>
         <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
@@ -30,7 +36,7 @@
           ></b-form-input>
         </b-input-group>
       </div>
-      <button class="mt-3 py-lg-2 btn-confirm w-100" type="submit">
+      <button type="submit" class="mt-3 py-lg-2 btn-confirm w-100">
         Confirm
       </button>
       <button
@@ -60,11 +66,15 @@ export default {
   methods: {
     ...mapActions(['updatePhone', 'getDataUser']),
     sendData() {
+      /* tambahakan alert */
       const setData = {
         Id: this.Id,
         form: this.form
       }
       this.updatePhone(setData)
+      this.$nextTick(() => {
+        this.$bvModal.hide('modal_phone')
+      })
     },
     GetData() {
       const form = {
@@ -73,6 +83,14 @@ export default {
       this.getDataUser(form).then(result => {
         this.form.phoneNumber = result.data.data[0].phone_number
       })
+    },
+    buildingNewData() {
+      this.sendData()
+      const form = {
+        userEmail: this.Myemail
+      }
+
+      this.getDataUser(form)
     }
   }
 }
