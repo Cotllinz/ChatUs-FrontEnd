@@ -2,7 +2,8 @@ import axios from 'axios'
 export default {
   state: {
     contact: [],
-    friend: []
+    friend: [],
+    reqFriend: []
   },
   mutations: {
     setFriend(state, payload) {
@@ -13,6 +14,12 @@ export default {
     },
     errorSearch(state) {
       state.friend = []
+    },
+    setFriendRequest(state, payload) {
+      state.reqFriend = payload.data
+    },
+    removeListReq(state) {
+      state.reqFriend = []
     }
   },
   actions: {
@@ -54,6 +61,44 @@ export default {
             reject(err.response)
           })
       })
+    },
+    removeFriend(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .delete(`${process.env.VUE_APP_URL}friend/deletefriend/${payload}`)
+          .then(result => {
+            resolve(result)
+          })
+          .catch(err => {
+            reject(err.response)
+          })
+      })
+    },
+    getFriendRequest(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${process.env.VUE_APP_URL}friend/friendrequest/${payload}`)
+          .then(result => {
+            context.commit('setFriendRequest', result.data)
+            resolve(result)
+          })
+          .catch(err => {
+            console.clear()
+            reject(err.response)
+          })
+      })
+    },
+    AcceptFriend(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.VUE_APP_URL}friend/acceptFriend`, payload)
+          .then(result => {
+            resolve(result)
+          })
+          .catch(err => {
+            reject(err.response)
+          })
+      })
     }
   },
   getters: {
@@ -62,6 +107,9 @@ export default {
     },
     getFriend(state) {
       return state.friend
+    },
+    getReqFriend(state) {
+      return state.reqFriend
     }
   }
 }
