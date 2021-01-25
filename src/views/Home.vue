@@ -15,6 +15,9 @@
         </b-col>
         <b-col style="padding: 0" lg="7">
           <chatRoom />
+          <!-- <div class="roomFree">
+            <h1>Please select a chat to start messaging</h1>
+          </div> -->
         </b-col>
       </b-row>
     </b-container>
