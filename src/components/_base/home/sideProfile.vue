@@ -49,19 +49,20 @@
         v-for="(items, index) in listRoom"
         :key="index"
         style="cursor: pointer;"
-        @click="roomGet(items.room_id)"
+        @click="roomGet(items)"
         class="d-flex mb-lg-3 align-items-center"
       >
         <img
+          v-if="items.lastChat"
           class="image_friendProfile"
           :src="`${enviro}${items.image_user}`"
           alt="image_chatfriend"
         />
-        <div class="ml-lg-3 name_tag mt-lg-3">
+        <div v-if="items.lastChat" class="ml-lg-3 name_tag mt-lg-3">
           <h2>{{ items.username }}</h2>
           <p class="mt-lg-2">{{ items.lastChat.chat_text }}</p>
         </div>
-        <div class="desc_time ml-auto mr-lg-2">
+        <div v-if="items.lastChat" class="desc_time ml-auto mr-lg-2">
           <h3>{{ formatTime(items.lastChat.created_at) }}</h3>
           <span v-if="items.unreadmessage[0].total > 0" class="badge">{{
             items.unreadmessage[0].total
@@ -73,7 +74,7 @@
 </template>
 <script>
 import moment from 'moment'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Menus from './menus'
 import Modaladdfriend from './modalAddfriend'
 import io from 'socket.io-client'
@@ -99,6 +100,9 @@ export default {
     }
     this.getDataUser(form)
     this.GetRoomList(this.Id)
+    this.socket.on('chatMessage', data => {
+      this.setSocketchat(data)
+    })
   },
   computed: {
     ...mapGetters({
@@ -110,6 +114,7 @@ export default {
   },
   methods: {
     ...mapActions(['getDataUser', 'GetRoomList', 'getChat']),
+    ...mapMutations(['setRoomDisplay', 'setSocketchat']),
     showMenus() {
       if (this.showMenu === 0) {
         this.showMenu = 1
@@ -121,28 +126,31 @@ export default {
       moment.locale('ID')
       return moment(String(value)).format('LT')
     },
-    roomGet(room) {
+    roomGet(data) {
       if (this.oldRoom) {
-        console.log(`Sudah pernah masuk ke room ${this.oldRoom}`)
-        console.log(`da akan masuk ke room ${room}`)
         this.socket.emit('changeRoom', {
-          username: this.username,
-          room: room,
+          room: data.room_id,
           oldRoom: this.oldRoom
         })
-        this.oldRoom = room
+        this.oldRoom = data.room_id
       } else {
-        console.log(`Belum Pernah Masuk ke Room mananpun`)
-        console.log(`Dan akan masuk ke room ${room}`)
         this.socket.emit('joinRoom', {
-          username: this.username,
-          room: room
+          room: data.room_id
         })
-        this.oldRoom = room
+        this.oldRoom = data.room_id
       }
+      const setUserDislay = {
+        userName: data.username,
+        phoneNumber: data.phone_number,
+        id: data.id_user,
+        imageUser: data.image_user,
+        login: data.login_date,
+        rooms: data.room_id
+      }
+      this.setRoomDisplay(setUserDislay)
       const form = {
         iduser: this.Id,
-        idRoom: room
+        idRoom: data.room_id
       }
       this.getChat(form)
       this.GetRoomList(this.Id)
