@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from '../store'
 import Home from '../views/home.vue'
 import Login from '../views/auth/Login.vue'
 import signUp from '../views/auth/signUp.vue'
 import forgot from '../views/auth/forgot.vue'
 import forgotnew from '../views/auth/forgotPassword.vue'
 import confirmEmail from '../views/auth/confirmEmail.vue'
+import store from '../store'
 Vue.use(VueRouter)
 
 const routes = [
