@@ -119,8 +119,10 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import Alert from '../../../mixins/alert'
 export default {
   name: 'ModalPhone',
+  mixins: [Alert],
   data() {
     return {
       url: null,
@@ -159,9 +161,16 @@ export default {
         email: this.Myemail
       }
       this.updateUser(updateAccout)
-      this.$nextTick(() => {
-        this.$bvModal.hide('modal_account')
-      })
+        .then(result => {
+          this.AlertSuccess(result.data.massage).then(() => {
+            this.$nextTick(() => {
+              this.$bvModal.hide('modal_account')
+            })
+          })
+        })
+        .catch(err => {
+          this.AlertError(err.data.massage)
+        })
     },
     GetData() {
       const form = {

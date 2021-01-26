@@ -82,8 +82,10 @@
 </template>
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import alert from '../../../mixins/alert'
 export default {
   name: 'ModalPhone',
+  mixins: [alert],
   data() {
     return {
       searchData: '',
@@ -136,12 +138,11 @@ export default {
       }
       this.addFriend(form)
         .then(result => {
-          alert(result.data.massage)
+          this.AlertSuccess(result.data.massage)
         })
         .catch(err => {
-          alert(err.data.massage)
+          this.AlertError(err.data.massage)
         })
-      console.log(event)
     }
   }
 }

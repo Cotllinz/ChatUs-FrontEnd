@@ -69,7 +69,7 @@
           </button>
           <p class="mt-lg-4 mt-4 mb-4 mb-lg-4 lim">Register with</p>
           <button type="button" class="btn_goggle py-3 mb-4 mb-lg-4 py-lg-3">
-            Google
+            <b-icon icon="google" aria-hidden="true"></b-icon>  Google
           </button>
         </b-form>
       </div>

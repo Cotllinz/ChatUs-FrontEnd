@@ -106,8 +106,10 @@
 </template>
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import Alert from '../../../mixins/alert'
 export default {
   name: 'sideContact',
+  mixins: [Alert],
   data() {
     return {
       enviro: process.env.VUE_APP_URL
@@ -149,9 +151,40 @@ export default {
       this.changeDisplay(0)
     },
     handleRemoveFriend(event) {
-      /* Alert Ditambahkan */
-      this.removeFriend(event).then(() => {
-        this.getContact(this.Id)
+      this.alertDelete().then(res => {
+        if (res.value) {
+          this.removeFriend(event).then(() => {
+            this.$swal({
+              title: 'Success Deleted Contact',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+              showClass: {
+                popup: 'animate__animated animate__fadeIn'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut'
+              }
+            }).then(() => {
+              this.getContact(this.Id)
+            })
+          })
+        } else {
+          this.$swal({
+            title: 'Your Contact is still intact',
+            icon: 'info',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            showClass: {
+              popup: 'animate__animated animate__fadeIn'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__fadeOut'
+            }
+          })
+        }
       })
     },
     handleAcceptFriend(event) {

@@ -66,6 +66,7 @@
         <b-form-input
           class="shadow-none"
           v-model="message"
+          autocomplete="off"
           @keyup.enter="sendMessage"
           placeholder="Type your message..."
         ></b-form-input>
@@ -105,7 +106,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['getDataUser', 'postChat']),
+    ...mapActions(['getDataUser', 'postChat', 'GetRoomList']),
     sendMessage() {
       const setDataToDatabase = {
         idSender: this.Id,
@@ -119,7 +120,9 @@ export default {
         chat_text: this.message
       }
       this.socket.emit('roomMessage', setDataToSocket)
-      this.postChat(setDataToDatabase)
+      this.postChat(setDataToDatabase).then(() => {
+        this.GetRoomList(this.Id)
+      })
       this.message = ''
     }
   }

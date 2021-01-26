@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="modal_editpass" centered hide-footer>
+  <b-modal id="modal_editpass" @hidden="resetModal" centered hide-footer>
     <template #modal-title>
       <h4 class="modal_phone ">
         Change your Password
@@ -58,8 +58,10 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import Alert from '../../../mixins/alert'
 export default {
   name: 'ModalPhone',
+  mixins: [Alert],
   data() {
     return {
       form: {
@@ -80,10 +82,20 @@ export default {
           Id: this.Id,
           Data: this.form
         }
-        this.updatePassword(sendData)
+        this.updatePassword(sendData).then(result => {
+          this.AlertSuccess(result.data.massage).then(() => {
+            this.$nextTick(() => {
+              this.$bvModal.hide('modal_editpass')
+            })
+          })
+        })
       } else {
-        console.log('Tidak Sama')
+        this.AlertError('Password Not Match')
       }
+    },
+    resetModal() {
+      this.form.newPassword = ''
+      this.confirmPassword = ''
     }
   }
 }

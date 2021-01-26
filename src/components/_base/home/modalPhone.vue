@@ -51,8 +51,10 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import MixinsAlert from '../../../mixins/alert'
 export default {
   name: 'ModalPhone',
+  mixins: [MixinsAlert],
   data() {
     return {
       form: {
@@ -71,9 +73,14 @@ export default {
         Id: this.Id,
         form: this.form
       }
-      this.updatePhone(setData)
-      this.$nextTick(() => {
-        this.$bvModal.hide('modal_phone')
+      this.updatePhone(setData).then(result => {
+        if (result) {
+          this.AlertSuccess(result.data.massage).then(() => {
+            this.$nextTick(() => {
+              this.$bvModal.hide('modal_phone')
+            })
+          })
+        }
       })
     },
     GetData() {
@@ -85,7 +92,6 @@ export default {
       })
     },
     buildingNewData() {
-      this.sendData()
       const form = {
         userEmail: this.Myemail
       }

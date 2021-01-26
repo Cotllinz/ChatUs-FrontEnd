@@ -19,8 +19,10 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import Alert from '../../../mixins/alert'
 export default {
   name: 'Maps',
+  mixins: [Alert],
   data() {
     return {}
   },
@@ -40,7 +42,7 @@ export default {
         }
       }
       this.updateLocation(sendLocation).then(result => {
-        if (result) {
+        this.AlertSuccess(result.data.massage).then(() => {
           const form = {
             userEmail: this.Myemail
           }
@@ -51,7 +53,7 @@ export default {
             }
             this.setCoordinate(setData)
           })
-        }
+        })
       })
     }
   }

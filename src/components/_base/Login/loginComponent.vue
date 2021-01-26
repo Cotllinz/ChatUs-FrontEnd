@@ -41,7 +41,9 @@
           >
           <button type="submit" class="btn_login py-3 py-lg-3">Login</button>
           <p class="mt-lg-4 mt-4 mb-4 mb-lg-4 lim">Login with</p>
-          <button type="button" class="btn_goggle py-3 py-lg-3">Google</button>
+          <button type="button" class="btn_goggle py-3 py-lg-3">
+            <b-icon icon="google" aria-hidden="true"></b-icon> Google
+          </button>
           <p class="text-center sign_up mt-4 mt-lg-4">
             Don’t have an account?
             <router-link tag="a" to="/signup">Sign Up</router-link>

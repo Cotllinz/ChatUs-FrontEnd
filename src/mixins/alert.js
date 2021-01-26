@@ -104,6 +104,69 @@ export default {
             reject(err)
           })
       })
+    },
+    AlertSuccess(msg) {
+      return new Promise((resolve, reject) => {
+        this.$swal({
+          title: `${msg}`,
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500,
+          showClass: {
+            popup: 'animate__animated animate__fadeIn'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOut'
+          }
+        })
+          .then(result => {
+            resolve(result)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    AlertError(msg) {
+      return new Promise((resolve, reject) => {
+        this.$swal({
+          title: `${msg}`,
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 1500,
+          showClass: {
+            popup: 'animate__animated animate__fadeIn'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOut'
+          }
+        })
+          .then(result => {
+            resolve(result)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    alertDelete() {
+      return new Promise((resolve, reject) => {
+        this.$swal({
+          title: 'Do You Want Delete this Contact?',
+          text: "You can't revert your action",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes Delete it!',
+          cancelButtonText: 'No, Keep it!',
+          showCloseButton: true
+        })
+          .then(result => {
+            resolve(result)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
     }
   }
 }
