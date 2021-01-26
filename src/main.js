@@ -8,11 +8,20 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'animate.css'
 import 'sweetalert2/dist/sweetalert2.min.css'
+import * as VueGoogleMaps from 'vue2-google-maps'
+import VueGeolocation from 'vue-browser-geolocation'
+Vue.use(VueGeolocation)
+Vue.use(BootstrapVue)
 Vue.use(VueSweetalert2)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.config.productionTip = false
-
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyDymMMjQQ5ktaO7lj5FifsXyy-wDOuY3mA',
+    libraries: 'places'
+  }
+})
 new Vue({
   router,
   store,

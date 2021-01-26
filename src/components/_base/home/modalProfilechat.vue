@@ -1,30 +1,50 @@
 <template>
-  <b-modal id="modal_showprofile" centered hide-header-close hide-footer>
+  <b-modal
+    id="modal_showprofile"
+    @show="getData"
+    centered
+    hide-header-close
+    hide-footer
+  >
     <header class="profile_page">
       <div class="d-flex">
-        <h3 class="mr-auto mt-lg-2 ml-auto">@Cotlinz</h3>
+        <h3 class="mr-auto mt-lg-2 ml-auto">@{{ Account.username }}</h3>
       </div>
       <div class="profile text-center mt-lg-2">
         <img
           class="profile_pic"
-          src="https://images.unsplash.com/photo-1572863141204-83031c77e65a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80"
+          :src="`${enviro}${Account.image_user}`"
           alt="imageProfile"
         />
-        <h2 class="mt-lg-3">Gloria Mckinney</h2>
-        <p>@wdlam</p>
+        <h2 class="mt-lg-3">
+          {{ Account.fullname ? Account.fullname : Account.username }}
+        </h2>
+        <p>@{{ Account.username }}</p>
       </div>
     </header>
     <main>
       <div class="account mt-lg-5">
         <h2>Phone number</h2>
-        <h5>+375(29)9638433</h5>
+        <h5>{{ Account.phone_number }}</h5>
       </div>
       <div class="bio mt-lg-4">
-        <h3>I’m Senior Frontend Developer from Microsoft</h3>
+        <h3>{{ Account.bio }}</h3>
         <p>Bio</p>
       </div>
       <div class="location">
-        <h2>Location</h2>
+        <h2>Friend Location</h2>
+        <GmapMap
+          class="maps"
+          :center="coordinate"
+          :zoom="7"
+          map-type-id="roadmap"
+          style="width: 400px; height: 200px"
+        >
+          <GmapMarker
+            :position="coordinate"
+            icon="https://img.icons8.com/color/48/000000/map-pin.png"
+          />
+        </GmapMap>
       </div>
     </main>
     <button
@@ -37,9 +57,35 @@
   </b-modal>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'ModalProfileChat',
-  methods: {}
+  data() {
+    return {
+      enviro: process.env.VUE_APP_URL,
+      coordinate: {
+        lat: 0,
+        lng: 0
+      }
+    }
+  },
+  computed: {
+    ...mapGetters({ AccountFriend: 'getroomDisplay', Account: 'getUserFriend' })
+  },
+  methods: {
+    ...mapActions(['showFriendProfile']),
+    getData() {
+      const form = {
+        userEmail: this.AccountFriend.email
+      }
+      this.showFriendProfile(form).then(() => {
+        this.coordinate = {
+          lat: Number(this.Account.lat),
+          lng: Number(this.Account.long)
+        }
+      })
+    }
+  }
 }
 </script>
 <style scoped>

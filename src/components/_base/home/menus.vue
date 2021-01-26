@@ -34,14 +34,27 @@
   </div>
 </template>
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Menus',
+  computed: {
+    ...mapGetters({ Myemail: 'getEmail' })
+  },
   methods: {
-    ...mapMutations(['changeDisplay']),
-    ...mapActions(['logout']),
+    ...mapMutations(['changeDisplay', 'setCoordinate']),
+    ...mapActions(['logout', 'getDataUser']),
     changeDisplaymenu(event) {
       this.changeDisplay(event)
+      const form = {
+        userEmail: this.Myemail
+      }
+      this.getDataUser(form).then(result => {
+        const setData = {
+          lat: Number(result.data.data[0].lat),
+          lng: Number(result.data.data[0].long)
+        }
+        this.setCoordinate(setData)
+      })
     },
     handleLogout() {
       this.logout()

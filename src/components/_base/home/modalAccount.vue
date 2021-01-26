@@ -13,11 +13,18 @@
     </template>
     <b-form @submit.stop.prevent="sendData">
       <div class="text-center mt-lg-4 mb-lg-3">
+        <img v-if="url" :src="url" class="style__image mb-lg-3" alt="images" />
         <img
-          v-if="url"
-          :src="url"
+          v-if="form.userImage && url === null"
+          :src="`${enviro}${form.userImage}`"
           class="style__image mb-lg-3"
-          alt="image__account"
+          alt="image"
+        />
+        <img
+          v-if="!url && !form.userImage"
+          src="../../../assets/images/icons/imageDefault.jpg"
+          class="style__image mb-lg-3"
+          alt="image_default"
         />
         <input id="fileUpload" type="file" @change="onFileChange" hidden />
         <b-col lg="12">
@@ -122,7 +129,8 @@ export default {
         userName: '',
         bioGrap: '',
         userImage: ''
-      }
+      },
+      enviro: process.env.VUE_APP_URL
     }
   },
   computed: {
@@ -163,9 +171,11 @@ export default {
         this.form.fullName = result.data.data[0].fullname
         this.form.userName = result.data.data[0].username
         this.form.bioGrap = result.data.data[0].bio
+        this.form.userImage = result.data.data[0].image_user
       })
     },
     buildingNewData() {
+      this.url = null
       const form = {
         userEmail: this.Myemail
       }

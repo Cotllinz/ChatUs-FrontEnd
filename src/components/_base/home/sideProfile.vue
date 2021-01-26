@@ -15,9 +15,12 @@
     </div>
     <div class="profile text-center mt-lg-5 pt-lg-3">
       <img
-        v-if="Account.image_user"
         class="img_profile"
-        :src="`${this.enviro}${Account.image_user}`"
+        :src="
+          Account.image_user
+            ? `${this.enviro}${Account.image_user}`
+            : require('../../../assets/images/icons/imageDefault.jpg')
+        "
         alt="image_profile"
       />
       <h2 class="mt-lg-3">
@@ -55,7 +58,11 @@
         <img
           v-if="items.lastChat"
           class="image_friendProfile"
-          :src="`${enviro}${items.image_user}`"
+          :src="
+            items.image_user
+              ? `${enviro}${items.image_user}`
+              : require('../../../assets/images/icons/imageDefault.jpg')
+          "
           alt="image_chatfriend"
         />
         <div v-if="items.lastChat" class="ml-lg-3 name_tag mt-lg-3">
@@ -114,7 +121,7 @@ export default {
   },
   methods: {
     ...mapActions(['getDataUser', 'GetRoomList', 'getChat']),
-    ...mapMutations(['setRoomDisplay', 'setSocketchat']),
+    ...mapMutations(['setRoomDisplay', 'setSocketchat', 'setDisplayChat']),
     showMenus() {
       if (this.showMenu === 0) {
         this.showMenu = 1
@@ -145,7 +152,8 @@ export default {
         id: data.id_user,
         imageUser: data.image_user,
         login: data.login_date,
-        rooms: data.room_id
+        rooms: data.room_id,
+        email: data.user_email
       }
       this.setRoomDisplay(setUserDislay)
       const form = {
@@ -154,6 +162,7 @@ export default {
       }
       this.getChat(form)
       this.GetRoomList(this.Id)
+      this.setDisplayChat(1)
     }
   }
 }

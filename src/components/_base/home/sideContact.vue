@@ -10,9 +10,12 @@
     </div>
     <div class="profile text-center mt-lg-3 pt-lg-3">
       <img
-        v-if="Account.image_user"
         class="img_profile"
-        :src="`${this.enviro}${Account.image_user}`"
+        :src="
+          Account.image_user
+            ? `${this.enviro}${Account.image_user}`
+            : require('../../../assets/images/icons/imageDefault.jpg')
+        "
         alt="image_profile"
       />
       <h2 class="mt-lg-3">
@@ -42,7 +45,11 @@
       >
         <img
           class="image_friendProfile"
-          :src="`${enviro}${item.image_user}`"
+          :src="
+            item.image_user
+              ? `${enviro}${item.image_user}`
+              : require('../../../assets/images/icons/imageDefault.jpg')
+          "
           alt="image_chatfriend"
         />
         <div class="ml-lg-3 name_tag mt-lg-3">

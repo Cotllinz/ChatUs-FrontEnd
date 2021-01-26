@@ -3,7 +3,11 @@ export default {
   state: {
     roomList: [],
     chat: [],
-    roomDisplay: []
+    roomDisplay: [],
+    coordinate: {
+      lat: 0,
+      lng: 0
+    }
   },
   mutations: {
     setListroom(state, payload) {
@@ -17,6 +21,10 @@ export default {
     },
     setSocketchat(state, payload) {
       state.chat.push(payload)
+    },
+    setCoordinate(state, payload) {
+      state.coordinate.lat = payload.lat
+      state.coordinate.lng = payload.lng
     }
   },
   actions: {
@@ -57,6 +65,22 @@ export default {
             reject(err.response)
           })
       })
+    },
+    updateLocation(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(
+            `${process.env.VUE_APP_URL}user/updateLocation/${payload.email}`,
+            payload.data
+          )
+          .then(result => {
+            console.log(result)
+            resolve(result)
+          })
+          .catch(err => {
+            reject(err.response)
+          })
+      })
     }
   },
   getters: {
@@ -68,6 +92,9 @@ export default {
     },
     getroomDisplay(state) {
       return state.roomDisplay
+    },
+    getLocation(state) {
+      return state.coordinate
     }
   }
 }

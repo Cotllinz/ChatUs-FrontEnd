@@ -42,7 +42,11 @@
       >
         <img
           class="image_friendProfile"
-          :src="`${enviro}${items.image_user}`"
+          :src="
+            items.image_user
+              ? `${enviro}${items.image_user}`
+              : require('../../../assets/images/icons/imageDefault.jpg')
+          "
           alt="image_chatfriend"
         />
         <div class="ml-lg-3 name_tag mt-lg-3">
@@ -64,7 +68,7 @@
         </button>
       </div>
     </div>
-    <div v-if="showAlert === true" class="massage_alert">
+    <div v-if="showAlert === true" class="mt-3 massage_alert">
       <h1>{{ this.massage }}</h1>
     </div>
     <button
@@ -153,7 +157,13 @@ label {
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
 }
-
+.massage_alert h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  color: #698be9;
+}
 .btn-cancel {
   font-family: 'Rubik', sans-serif;
   font-weight: 500;

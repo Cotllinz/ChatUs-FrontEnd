@@ -1,11 +1,15 @@
 import axios from 'axios'
 export default {
   state: {
-    userAccount: []
+    userAccount: [],
+    userFriend: []
   },
   mutations: {
     setUserData(state, payload) {
       state.userAccount = payload.data[0]
+    },
+    seProfileFriend(state, payload) {
+      state.userFriend = payload.data[0]
     }
   },
   actions: {
@@ -66,11 +70,27 @@ export default {
             reject(err.response)
           })
       })
+    },
+    showFriendProfile(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.VUE_APP_URL}user/check`, payload)
+          .then(result => {
+            context.commit('seProfileFriend', result.data)
+            resolve(result)
+          })
+          .catch(err => {
+            reject(err.response)
+          })
+      })
     }
   },
   getters: {
     getUserData(state) {
       return state.userAccount
+    },
+    getUserFriend(state) {
+      return state.userFriend
     }
   }
 }

@@ -3,7 +3,8 @@ import router from '../../router'
 export default {
   state: {
     user: {},
-    token: localStorage.getItem('token') || null
+    token: localStorage.getItem('token') || null,
+    ChatDisplay: 0
   },
   mutations: {
     setUser(state, payload) {
@@ -13,6 +14,9 @@ export default {
     delUser(state) {
       state.user = {}
       state.token = null
+    },
+    setDisplayChat(state, payload) {
+      state.ChatDisplay = payload
     }
   },
   actions: {
@@ -85,6 +89,7 @@ export default {
     },
     logout(context) {
       localStorage.removeItem('token')
+      context.state.ChatDisplay = 0
       context.commit('delUser')
       router.push('/')
     },
@@ -133,6 +138,9 @@ export default {
     },
     getId(state) {
       return state.user.userId
+    },
+    getDisplaying(state) {
+      return state.ChatDisplay
     }
   }
 }

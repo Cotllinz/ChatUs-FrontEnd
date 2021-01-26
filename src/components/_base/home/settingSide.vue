@@ -13,7 +13,11 @@
       <div class="profile text-center mt-lg-5 pt-lg-2">
         <img
           class="profile_pic"
-          :src="`${this.enviro}${Account.image_user}`"
+          :src="
+            Account.image_user
+              ? `${this.enviro}${Account.image_user}`
+              : require('../../../assets/images/icons/imageDefault.jpg')
+          "
           alt="imageProfile"
         />
         <h2 class="mt-lg-3">
@@ -37,6 +41,10 @@
       <div class="bio">
         <h3>{{ Account.bio }}</h3>
         <p>Bio</p>
+      </div>
+      <div class="maps mb-lg-3">
+        <h3>My Location</h3>
+        <Maps />
       </div>
       <div class="settings">
         <h2>Settings</h2>
@@ -73,12 +81,14 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Modalphone from './modalPhone'
 import Modalpassword from './modalPassword'
 import ModalAccount from './modalAccount'
+import Maps from './Maps'
 export default {
   name: 'SettingSide',
   components: {
     Modalphone,
     Modalpassword,
-    ModalAccount
+    ModalAccount,
+    Maps
   },
   data() {
     return {
@@ -125,6 +135,10 @@ main {
   font-family: 'Poppins', sans-serif;
 }
 .account h2 {
+  font-weight: 700;
+  font-size: 19px;
+}
+.maps h3 {
   font-weight: 700;
   font-size: 19px;
 }
