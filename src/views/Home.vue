@@ -33,7 +33,7 @@ import sideSetting from '../components/_base/home/settingSide'
 import sideContact from '../components/_base/home/sideContact'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
-  name: 'Home',
+  name: 'homePage',
   components: {
     sideProfile,
     chatRoom,

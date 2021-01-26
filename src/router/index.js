@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/home.vue'
+import homePage from '../views/home.vue'
 import Login from '../views/auth/Login.vue'
 import signUp from '../views/auth/signUp.vue'
 import forgot from '../views/auth/forgot.vue'
@@ -18,8 +18,8 @@ const routes = [
   },
   {
     path: '/home',
-    name: 'Home',
-    component: Home,
+    name: 'homePage',
+    component: homePage,
     meta: { requiresAuth: true }
   },
   {
