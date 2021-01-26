@@ -21,6 +21,7 @@ export default {
     },
     setSocketchat(state, payload) {
       state.chat.push(payload)
+      console.log(state.chat)
     },
     setCoordinate(state, payload) {
       state.coordinate.lat = payload.lat
@@ -75,6 +76,18 @@ export default {
           )
           .then(result => {
             console.log(result)
+            resolve(result)
+          })
+          .catch(err => {
+            reject(err.response)
+          })
+      })
+    },
+    createRoom(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.VUE_APP_URL}chat/createRoom`, payload)
+          .then(result => {
             resolve(result)
           })
           .catch(err => {

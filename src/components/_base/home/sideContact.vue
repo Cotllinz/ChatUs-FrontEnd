@@ -76,6 +76,8 @@
       <div
         v-for="(items, index) in contact"
         :key="index"
+        @click="sendRoom(items)"
+        style="cursor: pointer;"
         class="d-flex mb-lg-3 align-items-center"
       >
         <img
@@ -106,12 +108,14 @@
 </template>
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import io from 'socket.io-client'
 import Alert from '../../../mixins/alert'
 export default {
   name: 'sideContact',
   mixins: [Alert],
   data() {
     return {
+      socket: io('http://localhost:3000'),
       enviro: process.env.VUE_APP_URL
     }
   },
@@ -137,15 +141,26 @@ export default {
           this.removeListReq()
         }
       })
+    this.socket.on('chatMessage', data => {
+      this.setSocketchat(data)
+    })
   },
   methods: {
-    ...mapMutations(['changeDisplay', 'removeListReq']),
+    ...mapMutations([
+      'changeDisplay',
+      'removeListReq',
+      'setRoomDisplay',
+      'setDisplayChat',
+      'setSocketchat'
+    ]),
     ...mapActions([
       'getContact',
       'getDataUser',
       'removeFriend',
       'getFriendRequest',
-      'AcceptFriend'
+      'AcceptFriend',
+      'createRoom',
+      'getChat'
     ]),
     backDisplayhome() {
       this.changeDisplay(0)
@@ -205,6 +220,32 @@ export default {
             this.removeListReq()
           }
         })
+    },
+    sendRoom(items) {
+      const form = {
+        idSender: this.Id,
+        idRequest: items.id_user
+      }
+      this.createRoom(form).then(result => {
+        if (result.data.massage === 'Success Get Old Room') {
+          const setUserDislay = {
+            userName: items.username,
+            phoneNumber: items.phone_number,
+            id: items.id_user,
+            imageUser: items.image_user,
+            login: items.login_date,
+            rooms: result.data.data[0].room_id,
+            email: items.user_email
+          }
+          this.setRoomDisplay(setUserDislay)
+          const form = {
+            iduser: result.data.data[0].id_sender,
+            idRoom: result.data.data[0].room_id
+          }
+          this.getChat(form)
+          this.setDisplayChat(1)
+        }
+      })
     }
   }
 }
