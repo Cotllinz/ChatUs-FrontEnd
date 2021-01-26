@@ -7,7 +7,7 @@
     <a href="https://github.com/Cotllinz/ChatUs-FrontEnd/">Request Feature</a>
   </p>
 
-![Image Banner](src/assets/BG.PNG)
+![Image Banner](https://github.com/Cotllinz/ChatUs-FrontEnd/blob/master/src/assets/Bg%20Image.PNG)
 
 ## About The Project
 
