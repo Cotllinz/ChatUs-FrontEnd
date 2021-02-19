@@ -34,11 +34,11 @@
         ></b-form-input>
       </b-input-group>
     </div>
-    <div v-if="Friend.length > 0" class="list_search mt-lg-3">
+    <div v-if="Friend.length > 0" class="list_search mt-3 mt-lg-3">
       <div
         v-for="(items, index) in Friend"
         :key="index"
-        class="d-flex mb-lg-3 align-items-center"
+        class="d-flex mb-lg-3 mb-3 align-items-center"
       >
         <img
           class="image_friendProfile"
@@ -49,14 +49,14 @@
           "
           alt="image_chatfriend"
         />
-        <div class="ml-lg-3 name_tag mt-lg-3">
+        <div class="ml-lg-3 ml-2 mt-3 name_tag mt-lg-3">
           <h2>{{ items.username }}</h2>
           <p class="mt-lg-2">{{ items.user_email }}</p>
         </div>
         <button
           @click="onAdd(items.id_user)"
           type="button"
-          class="ml-auto py-lg-2 px-lg-2 btn_addfriend align-items-center"
+          class="ml-auto py-lg-2 py-2 px-2 px-lg-2 btn_addfriend align-items-center"
         >
           <b-icon
             icon="person-plus-fill"
@@ -73,7 +73,7 @@
     </div>
     <button
       type="button"
-      class="mt-3 btn-cancel py-lg-2 w-100"
+      class="mt-3 btn-cancel py-lg-2 py-2 w-100"
       @click="$bvModal.hide('modal_addfriend')"
     >
       Cancel
@@ -256,5 +256,14 @@ input[type='email'] {
   border-radius: 50%;
   background: #7e98df;
   color: white;
+}
+@media (max-width: 576px) {
+  .name_tag h2 {
+    font-size: 14px;
+  }
+  .name_tag p,
+  .desc_time h3 {
+    font-size: 13px;
+  }
 }
 </style>

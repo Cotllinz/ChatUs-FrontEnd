@@ -1,26 +1,29 @@
 <template>
-  <div class="menus_card animate__animated animate__fadeIn p-lg-3">
+  <div class="menus_card animate__animated animate__fadeIn pt-2 pt-0 p-lg-3">
     <b-col cols="12">
-      <button @click="changeDisplaymenu(1)" class="btn_setting mt-lg-2 mb-lg-4">
+      <button
+        @click="changeDisplaymenu(1)"
+        class="btn_setting mt-3 mt-lg-2 mb-3 mb-lg-4"
+      >
         <b-icon icon="gear" class="pr-4" variant="white"></b-icon> Settings
       </button>
     </b-col>
     <b-col cols="12">
-      <button @click="changeDisplaymenu(2)" class="btn_account mb-lg-4">
+      <button @click="changeDisplaymenu(2)" class="btn_account mb-3 mb-lg-4">
         <b-icon icon="person" class="pr-4" variant="white"></b-icon> Contacts
       </button>
     </b-col>
     <b-col cols="12">
       <button
         @click="$bvModal.show('modal_addfriend')"
-        class="btn_invitefriend mb-lg-4"
+        class="btn_invitefriend mb-3 mb-lg-4"
       >
         <b-icon icon="person-plus" class="pr-4" variant="white"></b-icon> Invite
         Friends
       </button>
     </b-col>
     <b-col cols="12">
-      <button @click="changeDisplaymenu(4)" class="btn_chatusfaq mb-lg-4">
+      <button @click="changeDisplaymenu(4)" class="btn_chatusfaq mb-3 mb-lg-4">
         <b-icon icon="question-circle" class="pr-4" variant="white"></b-icon>
         Chat.us FAQ
       </button>
@@ -91,5 +94,18 @@ export default {
 .btn_invitefriend,
 .btn_chatusfaq {
   border-bottom: 1px solid;
+}
+
+@media (max-width: 576px) {
+  .menus_card {
+    top: 55px;
+    right: 25px;
+    width: 210px;
+    height: 240px;
+    z-index: 1;
+    background: #7e98df;
+    border-radius: 35px 10px 35px 35px;
+    position: absolute;
+  }
 }
 </style>

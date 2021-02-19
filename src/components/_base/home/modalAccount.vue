@@ -12,7 +12,7 @@
       </h4>
     </template>
     <b-form @submit.stop.prevent="sendData">
-      <div class="text-center mt-lg-4 mb-lg-3">
+      <div class="text-center mt-3 mt-lg-4 mb-4 mb-lg-3">
         <img v-if="url" :src="url" class="style__image mb-lg-3" alt="images" />
         <img
           v-if="form.userImage && url === null"
@@ -30,7 +30,7 @@
         <b-col lg="12">
           <button
             type="button"
-            class="mt-3 btn_upload py-lg-2 w-50"
+            class="mt-3 btn_upload mt-4 py-2 py-lg-2 w-50"
             @click="chooseFiles"
           >
             Choose Photo
@@ -104,12 +104,12 @@
           ></b-form-input>
         </b-input-group>
       </div>
-      <button class="mt-4 py-lg-2 btn-confirm w-100" type="submit">
+      <button class="mt-4 py-lg-2 py-2 btn-confirm w-100" type="submit">
         Confirm
       </button>
       <button
         type="button"
-        class="mt-3 btn-cancel py-lg-2 w-100"
+        class="mt-3 btn-cancel py-lg-2 py-2 w-100"
         @click="$bvModal.hide('modal_account')"
       >
         Cancel

@@ -1,7 +1,7 @@
 <template>
   <div class="chatlog animate__animated animate__fadeIn">
     <header>
-      <div class="d-flex ml-lg-3 mt-lg-1 align-items-center">
+      <div class="d-flex ml-lg-3 ml-3 mt-lg-1 align-items-center">
         <img
           @click="$bvModal.show('modal_showprofile')"
           class="image_profilechat"
@@ -11,35 +11,39 @@
         <!-- Modal Profile Chat -->
         <Modalprofilechat />
         <!-- ====================== -->
-        <div class="chatname ml-lg-3 mt-lg-4">
+        <div class="chatname ml-lg-3 ml-2 mt-3 mt-lg-4">
           <h3>{{ Droom.userName }}</h3>
           <p>
             {{ Droom.login === '0000-00-00 00:00:00' ? 'Offline' : 'Online' }}
           </p>
         </div>
         <img
-          class="ml-auto img_icon mt-lg-3 mr-lg-3"
+          class="ml-auto img_icon mt-lg-3 mt-2 mr-3 mr-lg-3"
           src="../../../assets/images/icons/Profile menu.jpg"
           alt="images_menu"
         />
       </div>
     </header>
     <main>
-      <div v-for="(items, index) in Chat" :key="index" class="chat pt-lg-1">
+      <div
+        v-for="(items, index) in Chat"
+        :key="index"
+        class="chat pt-1 pt-lg-1"
+      >
         <div
           v-if="items.idChat_sender !== Id"
-          class="left_chat mb-lg-3 d-flex ml-lg-3 mt-lg-3 align-items-end"
+          class="left_chat mb-lg-3 mb-3 d-flex ml-3 ml-lg-3 mt-2 mt-lg-3 align-items-end"
         >
           <img
             class="photo_chat"
             :src="`${enviro}${Droom.imageUser}`"
             alt="left_chat"
           />
-          <p class="ml-lg-2">{{ items.chat_text }}</p>
+          <p class="ml-lg-2 ml-2">{{ items.chat_text }}</p>
         </div>
         <div
           v-if="items.idChat_sender === Id && items.idChat_recaiver !== Id"
-          class="right_chat d-flex mr-lg-3 mt-lg-4"
+          class="right_chat d-flex mr-3 mt-3 mr-lg-3 mt-lg-4"
         >
           <p class="ml-auto">{{ items.chat_text }}</p>
           <img
@@ -233,5 +237,14 @@ main::-webkit-scrollbar-thumb {
 .img_icon {
   height: 15px;
   object-fit: contain;
+}
+
+@media (max-width: 576px) {
+  .left_chat p {
+    max-width: 95vw;
+  }
+  .right_chat p {
+    max-width: 95vw;
+  }
 }
 </style>

@@ -22,7 +22,7 @@
             placeholder="Type your new password ..."
           ></b-form-input>
         </b-input-group>
-        <label class="mt-lg-3" for="phone">Confirm Password</label>
+        <label class="mt-lg-3 mt-3" for="phone">Confirm Password</label>
         <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
           <template #prepend>
             <b-input-group-text class="key_passconfrim">
@@ -43,12 +43,12 @@
           ></b-form-input>
         </b-input-group>
       </div>
-      <button class="mt-4 py-lg-2 btn-confirm w-100" type="submit">
+      <button class="mt-4 py-lg-2 py-2 btn-confirm w-100" type="submit">
         Confirm
       </button>
       <button
         type="button"
-        class="mt-3 btn-cancel py-lg-2 w-100"
+        class="mt-3 btn-cancel py-2 py-lg-2 w-100"
         @click="$bvModal.hide('modal_editpass')"
       >
         Cancel

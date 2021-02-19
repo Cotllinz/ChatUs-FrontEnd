@@ -1,16 +1,16 @@
 <template>
   <div class="setting_side animate__animated animate__zoomInUp">
     <header class="profile_page">
-      <div class="d-flex mt-lg-4">
+      <div class="d-flex mt-lg-4 mt-2">
         <img
           style="cursor: pointer;"
           @click="backDisplayhome"
           src="../../../assets/images/icons/back.svg"
           alt="imageBack"
         />
-        <h3 class="mr-auto mt-lg-2 ml-auto">@{{ Account.username }}</h3>
+        <h3 class="mr-auto mt-lg-2 mt-2 ml-auto">@{{ Account.username }}</h3>
       </div>
-      <div class="profile text-center mt-lg-5 pt-lg-2">
+      <div class="profile text-center mt-5 mt-lg-5 pt-lg-2">
         <img
           class="profile_pic"
           :src="
@@ -20,16 +20,16 @@
           "
           alt="imageProfile"
         />
-        <h2 class="mt-lg-3">
+        <h2 class="mt-lg-3 mt-3">
           {{ Account.fullname ? Account.fullname : Account.username }}
         </h2>
         <p>@{{ Account.username }}</p>
       </div>
     </header>
     <main>
-      <div class="account mt-lg-5">
+      <div class="account mt-lg-5 mt-4">
         <h2>Account</h2>
-        <h5 class="mt-lg-4">{{ Account.phone_number }}</h5>
+        <h5 class="mt-lg-4 mt-3">{{ Account.phone_number }}</h5>
         <a class="btn_changephone" @click="$bvModal.show('modal_phone')"
           >Tap to change phone number</a
         >
@@ -37,12 +37,12 @@
       <!-- Modal Edit Phone Number -->
       <Modalphone />
       <!-- =========================== -->
-      <hr class="mr-lg-5" />
+      <hr class="mr-lg-5 mt-3" />
       <div class="bio">
         <h3>{{ Account.bio }}</h3>
         <p>Bio</p>
       </div>
-      <div class="maps mb-lg-3">
+      <div class="maps mb-lg-3 mb-4">
         <h3>My Location</h3>
         <Maps />
       </div>
@@ -50,7 +50,7 @@
         <h2>Settings</h2>
         <button
           @click="$bvModal.show('modal_editpass')"
-          class="btn_editPass mt-lg-2 mb-lg-4 w-100"
+          class="btn_editPass mt-2 mb-3 mt-lg-2 mb-lg-4 w-100"
         >
           <b-icon
             icon="shield-lock"
@@ -64,7 +64,7 @@
         <!-- ====================== -->
         <button
           @click="$bvModal.show('modal_account')"
-          class="btn_account w-100 mb-lg-4"
+          class="btn_account w-100 mb-4 mb-lg-4"
         >
           <b-icon icon="person" class="pr-4" style="color: #7E98DF;"></b-icon>
           Edit Account

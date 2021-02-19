@@ -36,12 +36,12 @@
           ></b-form-input>
         </b-input-group>
       </div>
-      <button type="submit" class="mt-3 py-lg-2 btn-confirm w-100">
+      <button type="submit" class="mt-3 py-2 py-lg-2 btn-confirm w-100">
         Confirm
       </button>
       <button
         type="button"
-        class="mt-3 btn-cancel py-lg-2 w-100"
+        class="mt-3 btn-cancel py-lg-2 py-2 w-100"
         @click="$bvModal.hide('modal_phone')"
       >
         Cancel

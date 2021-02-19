@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <b-container>
+    <b-container class="MobilePosition">
       <b-row>
-        <b-col style="padding: 5px" lg="4">
+        <b-col style="padding: 5px" class="mobileRoom_style" cols="4" lg="4">
           <sideProfile
             class="animate__animated animate__fadeIn"
             v-if="menuDisplay === 0"
@@ -13,10 +13,10 @@
             v-else-if="menuDisplay === 2"
           />
         </b-col>
-        <b-col style="padding: 0" lg="7">
+        <b-col class="mobileChat_style" cols="8" lg="7">
           <chatRoom v-if="Display === 1" />
           <div v-if="Display === 0" class="roomFree d-flex align-items-center">
-            <h1 class="text-center p-lg-5">
+            <h1 class="text-center p-lg-5 p-5">
               Please select a chat to start messaging
             </h1>
           </div>
@@ -90,6 +90,9 @@ export default {
 }
 </script>
 <style scoped>
+.mobileChat_style {
+  padding: 0 !important;
+}
 .roomFree {
   height: 100vh;
   max-height: 100vh;
@@ -99,5 +102,14 @@ export default {
   font-size: 30px;
   font-weight: 700;
   color: #5e81e2;
+}
+
+@media (max-width: 576px) {
+  .MobilePosition {
+    width: 900px;
+  }
+  .mobileChat_style {
+    padding: 10px !important;
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="d-flex align-items-center title_app mt-lg-4">
+    <div class="d-flex align-items-center title_app mt-2 mt-lg-4">
       <h2>Chat.us</h2>
       <img
         @click="showMenus"
@@ -13,7 +13,7 @@
       <Modaladdfriend />
       <!-- ================== -->
     </div>
-    <div class="profile text-center mt-lg-5 pt-lg-3">
+    <div class="profile text-center mt-lg-5 mt-5 pt-lg-3">
       <img
         class="img_profile"
         :src="
@@ -23,13 +23,13 @@
         "
         alt="image_profile"
       />
-      <h2 class="mt-lg-3">
+      <h2 class="mt-lg-3 mt-2">
         {{ Account.fullname ? Account.fullname : Account.username }}
       </h2>
       <p>@{{ Account.username }}</p>
     </div>
-    <div class="d-flex mt-lg-5">
-      <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
+    <div class="d-flex mt-lg-5 mt-5">
+      <b-input-group class="mb-3 mb-lg-2 mr-sm-2 mb-sm-0">
         <template #prepend>
           <b-input-group-text class="search_btn">
             <b-icon icon="search" font-scale="1.5" aria-hidden="true"></b-icon
@@ -47,13 +47,13 @@
         aria-hidden="true"
       ></b-icon>
     </div>
-    <div class="chat_list mt-lg-3">
+    <div class="chat_list mt-2 mt-lg-3">
       <div
         v-for="(items, index) in listRoom"
         :key="index"
         style="cursor: pointer;"
         @click="roomGet(items)"
-        class="d-flex mb-lg-3 align-items-center"
+        class="d-flex mb-lg-3 mb-3 align-items-center"
       >
         <img
           v-if="items.lastChat"
@@ -65,11 +65,11 @@
           "
           alt="image_chatfriend"
         />
-        <div v-if="items.lastChat" class="ml-lg-3 name_tag mt-lg-3">
+        <div v-if="items.lastChat" class="ml-lg-3 ml-2 name_tag mt-3 mt-lg-3">
           <h2>{{ items.username }}</h2>
-          <p class="mt-lg-2">{{ items.lastChat.chat_text }}</p>
+          <p class="mt-lg-2 mt-1">{{ items.lastChat.chat_text }}</p>
         </div>
-        <div v-if="items.lastChat" class="desc_time ml-auto mr-lg-2">
+        <div v-if="items.lastChat" class="desc_time ml-auto mr-2 mr-lg-2">
           <h3>{{ formatTime(items.lastChat.created_at) }}</h3>
           <span v-if="items.unreadmessage[0].total > 0" class="badge">{{
             items.unreadmessage[0].total

@@ -3,31 +3,32 @@
     id="modal_showprofile"
     @show="getData"
     centered
+    hide-header
     hide-header-close
     hide-footer
   >
     <header class="profile_page">
       <div class="d-flex">
-        <h3 class="mr-auto mt-lg-2 ml-auto">@{{ Account.username }}</h3>
+        <h3 class="mr-auto mt-3 mt-lg-2 ml-auto">@{{ Account.username }}</h3>
       </div>
-      <div class="profile text-center mt-lg-2">
+      <div class="profile text-center mt-2 mt-lg-2">
         <img
           class="profile_pic"
           :src="`${enviro}${Account.image_user}`"
           alt="imageProfile"
         />
-        <h2 class="mt-lg-3">
+        <h2 class="mt-lg-3 mt-3">
           {{ Account.fullname ? Account.fullname : Account.username }}
         </h2>
         <p>@{{ Account.username }}</p>
       </div>
     </header>
     <main>
-      <div class="account mt-lg-5">
+      <div class="account mt-5 mt-lg-5">
         <h2>Phone number</h2>
         <h5>{{ Account.phone_number }}</h5>
       </div>
-      <div class="bio mt-lg-4">
+      <div class="bio mt-lg-4 mt-4">
         <h3>{{ Account.bio }}</h3>
         <p>Bio</p>
       </div>
@@ -38,7 +39,6 @@
           :center="coordinate"
           :zoom="7"
           map-type-id="roadmap"
-          style="width: 400px; height: 200px"
         >
           <GmapMarker
             :position="coordinate"
@@ -49,7 +49,7 @@
     </main>
     <button
       type="button"
-      class="mt-3 btn-cancel py-lg-2 w-100"
+      class="mt-3 btn-cancel py-2 py-lg-2 w-100"
       @click="$bvModal.hide('modal_showprofile')"
     >
       Close
@@ -94,6 +94,10 @@ export default {
   height: 100px;
   border-radius: 30px;
   object-fit: cover;
+}
+.maps {
+  width: 100%;
+  height: 300px;
 }
 .profile_page {
   font-family: 'Rubik', sans-serif;

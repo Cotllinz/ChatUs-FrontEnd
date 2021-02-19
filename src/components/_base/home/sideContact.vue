@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="d-flex align-items-center title_app mt-lg-4">
+    <div class="d-flex align-items-center title_app mt-3 mt-lg-4">
       <img
         style="cursor: pointer;"
         @click="backDisplayhome"
@@ -8,7 +8,7 @@
         alt="imageBack"
       />
     </div>
-    <div class="profile text-center mt-lg-3 pt-lg-3">
+    <div class="profile text-center mt-5 mt-lg-3 pt-lg-3">
       <img
         class="img_profile"
         :src="
@@ -18,13 +18,13 @@
         "
         alt="image_profile"
       />
-      <h2 class="mt-lg-3">
+      <h2 class="mt-lg-3 mt-2">
         {{ Account.fullname ? Account.fullname : Account.username }}
       </h2>
       <p>@{{ Account.username }}</p>
     </div>
-    <div class="d-flex mt-lg-5">
-      <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
+    <div class="d-flex mt-lg-5 mt-4">
+      <b-input-group class="mb-2 mb-4 mr-sm-2 mb-sm-0">
         <template #prepend>
           <b-input-group-text class="search_btn">
             <b-icon icon="search" font-scale="1.5" aria-hidden="true"></b-icon
@@ -36,12 +36,12 @@
         ></b-form-input>
       </b-input-group>
     </div>
-    <div class="chat_req mt-lg-3">
+    <div class="chat_req mt-lg-3 mt-2">
       <h3>Friend Request</h3>
       <div
         v-for="(item, index) in reqFriend"
         :key="index"
-        class="d-flex mb-lg-3 align-items-center"
+        class="d-flex mb-lg-3 mb-3 align-items-center"
       >
         <img
           class="image_friendProfile"
@@ -52,15 +52,15 @@
           "
           alt="image_chatfriend"
         />
-        <div class="ml-lg-3 name_tag mt-lg-3">
+        <div class="ml-lg-3 name_tag ml-2 mt-3 mt-lg-3">
           <h2>{{ item.username }}</h2>
-          <p class="mt-lg-2">
+          <p class="mt-lg-2 mt-2">
             {{
               item.login_date === '0000-00-00 00:00:00' ? 'Offline' : 'Online'
             }}
           </p>
         </div>
-        <div class="ml-auto mr-lg-2">
+        <div class="ml-auto mr-2 mr-lg-2">
           <span @click="handleAcceptFriend(item)" class="badge"
             ><b-icon
               icon="person-check-fill"
@@ -71,29 +71,29 @@
         </div>
       </div>
     </div>
-    <div class="chat_list mt-lg-3">
+    <div class="chat_list mt-3 mt-lg-3">
       <h3>Friend Contact</h3>
       <div
         v-for="(items, index) in contact"
         :key="index"
         @click="sendRoom(items)"
         style="cursor: pointer;"
-        class="d-flex mb-lg-3 align-items-center"
+        class="d-flex mb-lg-3 mb-3 align-items-center"
       >
         <img
           class="image_friendProfile"
           :src="`${enviro}${items.image_user}`"
           alt="image_chatfriend"
         />
-        <div class="ml-lg-3 name_tag mt-lg-3">
+        <div class="ml-lg-3 ml-2 name_tag mt-3 mt-lg-3">
           <h2>{{ items.username }}</h2>
-          <p class="mt-lg-2">
+          <p class="mt-lg-2 mt-2">
             {{
               items.login_date === '0000-00-00 00:00:00' ? 'Offline' : 'Online'
             }}
           </p>
         </div>
-        <div class="ml-auto mr-lg-2">
+        <div class="ml-auto mr-2 mr-lg-2">
           <span @click="handleRemoveFriend(items.id)" class="badge"
             ><b-icon
               icon="trash2-fill"
