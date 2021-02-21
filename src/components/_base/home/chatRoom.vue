@@ -5,7 +5,11 @@
         <img
           @click="$bvModal.show('modal_showprofile')"
           class="image_profilechat"
-          :src="`${enviro}${Droom.imageUser}`"
+          :src="
+            Droom.imageUser
+              ? `${enviro}${Droom.imageUser}`
+              : require('../../../assets/images/icons/imageDefault.jpg')
+          "
           alt=""
         />
         <!-- Modal Profile Chat -->
@@ -25,6 +29,11 @@
       </div>
     </header>
     <main>
+      <p v-if="typing.isTyping" class="mt-2" style="text-align:center">
+        <em v-if="typing.username === this.Droom.userName"
+          >{{ typing.username }} is typing a message...</em
+        >
+      </p>
       <div
         v-for="(items, index) in Chat"
         :key="index"
@@ -36,7 +45,11 @@
         >
           <img
             class="photo_chat"
-            :src="`${enviro}${Droom.imageUser}`"
+            :src="
+              Droom.imageUser
+                ? `${enviro}${Droom.imageUser}`
+                : require('../../../assets/images/icons/imageDefault.jpg')
+            "
             alt="left_chat"
           />
           <p class="ml-lg-2 ml-2">{{ items.chat_text }}</p>
@@ -47,7 +60,11 @@
         >
           <p class="ml-auto">{{ items.chat_text }}</p>
           <img
-            :src="`${enviro}${Account.image_user}`"
+            :src="
+              Account.image_user
+                ? `${enviro}${Account.image_user}`
+                : require('../../../assets/images/icons/imageDefault.jpg')
+            "
             class="photo_chat ml-2"
             alt="left_chat"
           />
@@ -91,8 +108,29 @@ export default {
     return {
       socket: io('http://localhost:3000'),
       enviro: process.env.VUE_APP_URL,
-      message: ''
+      message: '',
+      roomMessage: ''
     }
+  },
+  watch: {
+    message(value) {
+      value
+        ? this.socket.emit('typing', {
+            username: this.Droom.userName,
+            room: this.Droom.rooms,
+            isTyping: true
+          })
+        : this.socket.emit('typing', {
+            room: this.Droom.rooms,
+            isTyping: false
+          })
+    }
+  },
+  updated() {
+    if (this.roomMessage !== this.Droom.rooms) {
+      this.message = ''
+    }
+    this.roomMessage = this.Droom.rooms
   },
   created() {
     const form = {
@@ -106,28 +144,37 @@ export default {
       Id: 'getId',
       Account: 'getUserData',
       Myemail: 'getEmail',
-      Droom: 'getroomDisplay'
+      Droom: 'getroomDisplay',
+      typing: 'getTyping'
     })
   },
   methods: {
     ...mapActions(['getDataUser', 'postChat', 'GetRoomList']),
     sendMessage() {
-      const setDataToDatabase = {
-        idSender: this.Id,
-        idRecaiver: this.Droom.id,
-        chatText: this.message
+      if (this.message.length > 0) {
+        const setDataToDatabase = {
+          idSender: this.Id,
+          idRecaiver: this.Droom.id,
+          chatText: this.message
+        }
+        const sendNotif = {
+          username: this.Droom.userName,
+          room: this.Id,
+          notif: true
+        }
+        this.socket.emit('roomMessage', sendNotif)
+        const setDataToSocket = {
+          room: this.Droom.rooms,
+          idChat_sender: this.Id,
+          idChat_recaiver: this.Droom.id,
+          chat_text: this.message
+        }
+        this.socket.emit('roomMessage', setDataToSocket)
+        this.postChat(setDataToDatabase).then(() => {
+          this.GetRoomList(this.Id)
+        })
+        this.message = ''
       }
-      const setDataToSocket = {
-        room: this.Droom.rooms,
-        idChat_sender: this.Id,
-        idChat_recaiver: this.Droom.id,
-        chat_text: this.message
-      }
-      this.socket.emit('roomMessage', setDataToSocket)
-      this.postChat(setDataToDatabase).then(() => {
-        this.GetRoomList(this.Id)
-      })
-      this.message = ''
     }
   }
 }

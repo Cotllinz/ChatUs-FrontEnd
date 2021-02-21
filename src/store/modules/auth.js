@@ -87,11 +87,22 @@ export default {
           })
       })
     },
-    logout(context) {
-      localStorage.removeItem('token')
-      context.state.ChatDisplay = 0
-      context.commit('delUser')
-      router.push('/')
+    logout({ commit, state }) {
+      console.log(state.user)
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(`${process.env.VUE_APP_URL}user/logout/${state.user.userId}`)
+          .then(res => {
+            resolve(res)
+            localStorage.removeItem('token')
+            state.ChatDisplay = 0
+            commit('delUser')
+            router.push('/')
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
     },
     interceptorRequest(context) {
       axios.interceptors.request.use(
@@ -135,6 +146,9 @@ export default {
     },
     getEmail(state) {
       return state.user.userEmail
+    },
+    getUsername(state) {
+      return state.user.userName
     },
     getId(state) {
       return state.user.userId

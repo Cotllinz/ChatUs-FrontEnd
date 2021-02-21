@@ -82,7 +82,11 @@
       >
         <img
           class="image_friendProfile"
-          :src="`${enviro}${items.image_user}`"
+          :src="
+            items.image_user
+              ? `${enviro}${items.image_user}`
+              : require('../../../assets/images/icons/imageDefault.jpg')
+          "
           alt="image_chatfriend"
         />
         <div class="ml-lg-3 ml-2 name_tag mt-3 mt-lg-3">
@@ -116,7 +120,9 @@ export default {
   data() {
     return {
       socket: io('http://localhost:3000'),
-      enviro: process.env.VUE_APP_URL
+      enviro: process.env.VUE_APP_URL,
+      room: '',
+      oldRoom: ''
     }
   },
   computed: {
@@ -151,7 +157,8 @@ export default {
       'removeListReq',
       'setRoomDisplay',
       'setDisplayChat',
-      'setSocketchat'
+      'setSocketchat',
+      'setErrorChat'
     ]),
     ...mapActions([
       'getContact',
@@ -227,7 +234,54 @@ export default {
         idRequest: items.id_user
       }
       this.createRoom(form).then(result => {
-        if (result.data.massage === 'Success Get Old Room') {
+        if (result.data.massage === 'Success Create Room') {
+          if (this.oldRoom) {
+            this.socket.emit('changeRoom', {
+              room: result.data.data.room_id,
+              oldRoom: this.oldRoom
+            })
+            this.oldRoom = result.data.data.room_id
+          } else {
+            this.socket.emit('joinRoom', {
+              room: result.data.data.room_id
+            })
+            this.oldRoom = result.data.data.room_id
+          }
+          const setUserDislay = {
+            userName: items.username,
+            phoneNumber: items.phone_number,
+            id: items.id_user,
+            imageUser: items.image_user,
+            login: items.login_date,
+            rooms: result.data.data.room_id,
+            email: items.user_email
+          }
+          this.setRoomDisplay(setUserDislay)
+          const form = {
+            iduser: result.data.data.id_sender,
+            idRoom: result.data.data.room_id
+          }
+          this.getChat(form)
+            .then(() => {})
+            .catch(err => {
+              if (err) {
+                this.setErrorChat()
+              }
+            })
+          this.setDisplayChat(1)
+        } else if (result.data.massage === 'Success Get Old Room') {
+          if (this.oldRoom) {
+            this.socket.emit('changeRoom', {
+              room: result.data.data[0].room_id,
+              oldRoom: this.oldRoom
+            })
+            this.oldRoom = result.data.data[0].room_id
+          } else {
+            this.socket.emit('joinRoom', {
+              room: result.data.data[0].room_id
+            })
+            this.oldRoom = result.data.data[0].room_id
+          }
           const setUserDislay = {
             userName: items.username,
             phoneNumber: items.phone_number,
@@ -243,6 +297,12 @@ export default {
             idRoom: result.data.data[0].room_id
           }
           this.getChat(form)
+            .then(() => {})
+            .catch(err => {
+              if (err) {
+                this.setErrorChat()
+              }
+            })
           this.setDisplayChat(1)
         }
       })

@@ -7,11 +7,15 @@ export default {
     coordinate: {
       lat: 0,
       lng: 0
-    }
+    },
+    typing: {}
   },
   mutations: {
     setListroom(state, payload) {
       state.roomList = payload.data
+    },
+    setErrorChat(state) {
+      state.chat = []
     },
     chat(state, payload) {
       state.chat = payload.data
@@ -26,6 +30,9 @@ export default {
     setCoordinate(state, payload) {
       state.coordinate.lat = payload.lat
       state.coordinate.lng = payload.lng
+    },
+    typingMessage(state, payload) {
+      state.typing = payload
     }
   },
   actions: {
@@ -52,6 +59,7 @@ export default {
           })
           .catch(err => {
             reject(err.response)
+            console.clear(err)
           })
       })
     },
@@ -108,6 +116,9 @@ export default {
     },
     getLocation(state) {
       return state.coordinate
+    },
+    getTyping(state) {
+      return state.typing
     }
   }
 }

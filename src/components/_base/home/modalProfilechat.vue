@@ -14,7 +14,11 @@
       <div class="profile text-center mt-2 mt-lg-2">
         <img
           class="profile_pic"
-          :src="`${enviro}${Account.image_user}`"
+          :src="
+            Account.image_user
+              ? `${enviro}${Account.image_user}`
+              : require('../../../assets/images/icons/imageDefault.jpg')
+          "
           alt="imageProfile"
         />
         <h2 class="mt-lg-3 mt-3">
@@ -26,10 +30,10 @@
     <main>
       <div class="account mt-5 mt-lg-5">
         <h2>Phone number</h2>
-        <h5>{{ Account.phone_number }}</h5>
+        <h5>{{ Account.phone_number ? Account.phone_number : '-' }}</h5>
       </div>
       <div class="bio mt-lg-4 mt-4">
-        <h3>{{ Account.bio }}</h3>
+        <h3>{{ Account.bio ? Account.bio : 'Hello Everyone' }}</h3>
         <p>Bio</p>
       </div>
       <div class="location">

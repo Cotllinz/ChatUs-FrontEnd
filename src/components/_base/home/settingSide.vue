@@ -29,7 +29,9 @@
     <main>
       <div class="account mt-lg-5 mt-4">
         <h2>Account</h2>
-        <h5 class="mt-lg-4 mt-3">{{ Account.phone_number }}</h5>
+        <h5 class="mt-lg-4 mt-3">
+          {{ Account.phone_number ? Account.phone_number : '-' }}
+        </h5>
         <a class="btn_changephone" @click="$bvModal.show('modal_phone')"
           >Tap to change phone number</a
         >
@@ -39,7 +41,7 @@
       <!-- =========================== -->
       <hr class="mr-lg-5 mt-3" />
       <div class="bio">
-        <h3>{{ Account.bio }}</h3>
+        <h3>{{ Account.bio ? Account.bio : 'Hello Everyone' }}</h3>
         <p>Bio</p>
       </div>
       <div class="maps mb-lg-3 mb-4">

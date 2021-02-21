@@ -67,7 +67,7 @@
         />
         <div v-if="items.lastChat" class="ml-lg-3 ml-2 name_tag mt-3 mt-lg-3">
           <h2>{{ items.username }}</h2>
-          <p class="mt-lg-2 mt-1">{{ items.lastChat.chat_text }}</p>
+          <p class="mt-lg-2 mt-1">{{ sliceChat(items.lastChat.chat_text) }}</p>
         </div>
         <div v-if="items.lastChat" class="desc_time ml-auto mr-2 mr-lg-2">
           <h3>{{ formatTime(items.lastChat.created_at) }}</h3>
@@ -108,7 +108,21 @@ export default {
     this.getDataUser(form)
     this.GetRoomList(this.Id)
     this.socket.on('chatMessage', data => {
-      this.setSocketchat(data)
+      console.log(data)
+      if (data.chat_text) {
+        this.setSocketchat(data)
+      } else if (data.notif) {
+        this.$toasted.success('New message from ' + data.username, {
+          duration: 1000
+        })
+      }
+    })
+    this.socket.on('typingMessage', data => {
+      this.typingMessage(data)
+    })
+    this.socket.emit('joinRoom', {
+      username: this.userName,
+      room: this.Id
     })
   },
   computed: {
@@ -116,12 +130,18 @@ export default {
       Account: 'getUserData',
       Myemail: 'getEmail',
       Id: 'getId',
-      listRoom: 'getRoom'
+      listRoom: 'getRoom',
+      userName: 'getUsername'
     })
   },
   methods: {
     ...mapActions(['getDataUser', 'GetRoomList', 'getChat']),
-    ...mapMutations(['setRoomDisplay', 'setSocketchat', 'setDisplayChat']),
+    ...mapMutations([
+      'setRoomDisplay',
+      'setSocketchat',
+      'setDisplayChat',
+      'typingMessage'
+    ]),
     showMenus() {
       if (this.showMenu === 0) {
         this.showMenu = 1
@@ -132,6 +152,13 @@ export default {
     formatTime(value) {
       moment.locale('ID')
       return moment(String(value)).format('LT')
+    },
+    sliceChat(value) {
+      if (value.length > 15) {
+        return value.slice(0, 15) + '...'
+      } else {
+        return value
+      }
     },
     roomGet(data) {
       if (this.oldRoom) {
