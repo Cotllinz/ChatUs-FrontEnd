@@ -66,7 +66,7 @@ export default {
   name: 'ModalProfileChat',
   data() {
     return {
-      enviro: process.env.VUE_APP_URL,
+      enviro: process.env.VUE_APP_URL_IMAGE,
       coordinate: {
         lat: 0,
         lng: 0

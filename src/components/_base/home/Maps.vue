@@ -33,7 +33,6 @@ export default {
     ...mapMutations(['setCoordinate']),
     ...mapActions(['updateLocation', 'getDataUser']),
     clickMarker(position) {
-      /* Set Alert */
       const sendLocation = {
         email: this.Myemail,
         data: {

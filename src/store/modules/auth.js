@@ -88,7 +88,6 @@ export default {
       })
     },
     logout({ commit, state }) {
-      console.log(state.user)
       return new Promise((resolve, reject) => {
         axios
           .patch(`${process.env.VUE_APP_URL}user/logout/${state.user.userId}`)

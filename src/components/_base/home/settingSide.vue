@@ -94,7 +94,7 @@ export default {
   },
   data() {
     return {
-      enviro: process.env.VUE_APP_URL
+      enviro: process.env.VUE_APP_URL_IMAGE
     }
   },
   computed: {

@@ -76,7 +76,6 @@ export default {
   methods: {
     ...mapActions(['updatePassword']),
     sendData() {
-      /* Alert Belum Dimasukan */
       if (this.confirmPassword === this.form.newPassword) {
         const sendData = {
           Id: this.Id,

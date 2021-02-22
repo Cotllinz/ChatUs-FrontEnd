@@ -28,12 +28,7 @@
         />
       </div>
     </header>
-    <main>
-      <p v-if="typing.isTyping" class="mt-2" style="text-align:center">
-        <em v-if="typing.username === this.Droom.userName"
-          >{{ typing.username }} is typing a message...</em
-        >
-      </p>
+    <main id="scroll">
       <div
         v-for="(items, index) in Chat"
         :key="index"
@@ -70,6 +65,11 @@
           />
         </div>
       </div>
+      <p v-if="typing.isTyping" class="mt-2" style="text-align:center">
+        <em v-if="typing.username === this.Droom.userName"
+          >{{ typing.username }} is typing a message...</em
+        >
+      </p>
     </main>
     <section class="typing_msg">
       <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
@@ -106,8 +106,10 @@ export default {
   },
   data() {
     return {
-      socket: io('http://localhost:3000'),
-      enviro: process.env.VUE_APP_URL,
+      socket: io(`${process.env.VUE_APP_URL_SOCKET}`, {
+        path: '/api2/socket.io'
+      }),
+      enviro: process.env.VUE_APP_URL_IMAGE,
       message: '',
       roomMessage: ''
     }
@@ -116,7 +118,7 @@ export default {
     message(value) {
       value
         ? this.socket.emit('typing', {
-            username: this.Droom.userName,
+            username: this.MyuserName,
             room: this.Droom.rooms,
             isTyping: true
           })
@@ -127,6 +129,7 @@ export default {
     }
   },
   updated() {
+    this.scroll()
     if (this.roomMessage !== this.Droom.rooms) {
       this.message = ''
     }
@@ -145,7 +148,8 @@ export default {
       Account: 'getUserData',
       Myemail: 'getEmail',
       Droom: 'getroomDisplay',
-      typing: 'getTyping'
+      typing: 'getTyping',
+      MyuserName: 'getUsername'
     })
   },
   methods: {
@@ -158,8 +162,8 @@ export default {
           chatText: this.message
         }
         const sendNotif = {
-          username: this.Droom.userName,
-          room: this.Id,
+          username: this.MyuserName,
+          room: this.Droom.id,
           notif: true
         }
         this.socket.emit('roomMessage', sendNotif)
@@ -175,6 +179,11 @@ export default {
         })
         this.message = ''
       }
+    },
+    scroll() {
+      document.getElementById('scroll').scrollTop = document.getElementById(
+        'scroll'
+      ).scrollHeight
     }
   }
 }

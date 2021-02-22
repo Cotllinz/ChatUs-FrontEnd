@@ -91,7 +91,7 @@ export default {
       searchData: '',
       showAlert: false,
       massage: '',
-      enviro: process.env.VUE_APP_URL
+      enviro: process.env.VUE_APP_URL_IMAGE
     }
   },
   computed: {
@@ -131,7 +131,6 @@ export default {
       this.massage = ''
     },
     onAdd(event) {
-      /* Perlu ditambahakan alert */
       const form = {
         idRequest: this.MyId,
         idResponse: event

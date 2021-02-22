@@ -119,8 +119,10 @@ export default {
   mixins: [Alert],
   data() {
     return {
-      socket: io('http://localhost:3000'),
-      enviro: process.env.VUE_APP_URL,
+      socket: io(`${process.env.VUE_APP_URL_SOCKET}`, {
+        path: '/api2/socket.io'
+      }),
+      enviro: process.env.VUE_APP_URL_IMAGE,
       room: '',
       oldRoom: ''
     }
@@ -148,7 +150,16 @@ export default {
         }
       })
     this.socket.on('chatMessage', data => {
-      this.setSocketchat(data)
+      if (data.chat_text) {
+        this.setSocketchat(data)
+      } else if (data.notif) {
+        this.$toasted.success('New message from ' + data.username, {
+          duration: 1000
+        })
+      }
+    })
+    this.socket.on('typingMessage', data => {
+      this.typingMessage(data)
     })
   },
   methods: {
@@ -158,7 +169,8 @@ export default {
       'setRoomDisplay',
       'setDisplayChat',
       'setSocketchat',
-      'setErrorChat'
+      'setErrorChat',
+      'typingMessage'
     ]),
     ...mapActions([
       'getContact',

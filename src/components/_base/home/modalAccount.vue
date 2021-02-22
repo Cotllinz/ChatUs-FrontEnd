@@ -132,7 +132,7 @@ export default {
         bioGrap: '',
         userImage: ''
       },
-      enviro: process.env.VUE_APP_URL
+      enviro: process.env.VUE_APP_URL_IMAGE
     }
   },
   computed: {
@@ -149,7 +149,6 @@ export default {
       this.url = URL.createObjectURL(file)
     },
     sendData() {
-      /* Alert Ditambahkan */
       const { fullName, userName, bioGrap, userImage } = this.form
       const dataSendAccount = new FormData()
       dataSendAccount.append('fullName', fullName)

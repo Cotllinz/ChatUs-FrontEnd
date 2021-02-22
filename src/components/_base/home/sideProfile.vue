@@ -94,9 +94,11 @@ export default {
   },
   data() {
     return {
-      socket: io('http://localhost:3000'),
+      socket: io(`${process.env.VUE_APP_URL_SOCKET}`, {
+        path: '/api2/socket.io'
+      }),
       showMenu: 0,
-      enviro: process.env.VUE_APP_URL,
+      enviro: process.env.VUE_APP_URL_IMAGE,
       room: '',
       oldRoom: ''
     }
@@ -108,7 +110,6 @@ export default {
     this.getDataUser(form)
     this.GetRoomList(this.Id)
     this.socket.on('chatMessage', data => {
-      console.log(data)
       if (data.chat_text) {
         this.setSocketchat(data)
       } else if (data.notif) {

@@ -68,7 +68,6 @@ export default {
   methods: {
     ...mapActions(['updatePhone', 'getDataUser']),
     sendData() {
-      /* tambahakan alert */
       const setData = {
         Id: this.Id,
         form: this.form

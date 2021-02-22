@@ -38,10 +38,18 @@
 </template>
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import io from 'socket.io-client'
 export default {
   name: 'Menus',
+  data() {
+    return {
+      socket: io(`${process.env.VUE_APP_URL_SOCKET}`, {
+        path: '/api2/socket.io'
+      })
+    }
+  },
   computed: {
-    ...mapGetters({ Myemail: 'getEmail' })
+    ...mapGetters({ Myemail: 'getEmail', Id: 'getId', Username: 'getUsername' })
   },
   methods: {
     ...mapMutations(['changeDisplay', 'setCoordinate']),
@@ -60,6 +68,10 @@ export default {
       })
     },
     handleLogout() {
+      this.socket.emit('leaveRoom', {
+        username: this.Username,
+        room: this.Id
+      })
       this.logout()
     }
   }

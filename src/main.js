@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'animate.css'
+import toasted from 'vue-toasted'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VueGeolocation from 'vue-browser-geolocation'
@@ -22,6 +23,17 @@ Vue.use(VueGoogleMaps, {
     libraries: 'places'
   }
 })
+Vue.use(toasted, {
+  duration: 10000,
+  position: 'top-right',
+  action: {
+    text: 'Close',
+    onClick: (e, toastObject) => {
+      toastObject.goAway(0)
+    }
+  }
+})
+
 new Vue({
   router,
   store,

@@ -25,7 +25,6 @@ export default {
     },
     setSocketchat(state, payload) {
       state.chat.push(payload)
-      console.log(state.chat)
     },
     setCoordinate(state, payload) {
       state.coordinate.lat = payload.lat
@@ -83,7 +82,6 @@ export default {
             payload.data
           )
           .then(result => {
-            console.log(result)
             resolve(result)
           })
           .catch(err => {
