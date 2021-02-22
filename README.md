@@ -7,7 +7,7 @@
     <a href="https://github.com/Cotllinz/ChatUs-FrontEnd/pulls">Request Feature</a>
   </p>
 
-![Image Banner](https://raw.githubusercontent.com/Cotllinz/anya_coffee_frontend/master/public/smartmockups_kl9686ip.jpg)
+![Image Banner](https://raw.githubusercontent.com/Cotllinz/ChatUs-FrontEnd/master/smartmockups_klg56n1d.jpg)
 
 ## About The Project
 
