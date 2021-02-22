@@ -1,4 +1,4 @@
-<h1 align='center'>Vue JS - #Chat.us</h1>
+<h1 align='center'>Vue JS - Chat.us</h1>
   <p align="center">
     <a href="https://chatuss.netlify.app/">View Demo</a>
     ·
