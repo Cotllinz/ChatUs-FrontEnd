@@ -27,7 +27,7 @@ this website build with tools etc. Vue, Express,js Mysql, Node.js.
 
 ## Getting Started
 
-1. Download this Project or you can type `https://github.com/Cotllinz/anya_coffee_frontend.git`
+1. Download this Project or you can type `https://github.com/Cotllinz/ChatUs-FrontEnd.git`
 2. Open app's directory in CMD or Terminal
 3. Type `npm install` or `yarn install`
 4. Add .env file at root folder project
