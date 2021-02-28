@@ -8,7 +8,9 @@ export default {
       lat: 0,
       lng: 0
     },
-    typing: {}
+    typing: {},
+    room: '',
+    onNotif: false
   },
   mutations: {
     setListroom(state, payload) {
@@ -17,8 +19,17 @@ export default {
     setErrorChat(state) {
       state.chat = []
     },
+    onNotif(state) {
+      state.onNotif = true
+    },
+    clearRoom(state) {
+      state.roomList = []
+    },
     chat(state, payload) {
       state.chat = payload.data
+    },
+    Roomset(state, payload) {
+      state.room = payload
     },
     setRoomDisplay(state, payload) {
       state.roomDisplay = payload
@@ -74,6 +85,18 @@ export default {
           })
       })
     },
+    readingChat(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.VUE_APP_URL}chat/read`, payload)
+          .then(result => {
+            resolve(result)
+          })
+          .catch(err => {
+            reject(err.response)
+          })
+      })
+    },
     updateLocation(context, payload) {
       return new Promise((resolve, reject) => {
         axios
@@ -117,6 +140,12 @@ export default {
     },
     getTyping(state) {
       return state.typing
+    },
+    getRooms(state) {
+      return state.room
+    },
+    getTurnOnNotif(state) {
+      return state.onNotif
     }
   }
 }

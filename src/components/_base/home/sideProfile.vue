@@ -8,7 +8,62 @@
         src="../../../assets/images/icons/Menu.jpg"
         alt="images_menu"
       />
-      <Menus v-if="showMenu === 1" />
+      <!-- Menus Modals -->
+      <div
+        v-if="showMenu === 1"
+        class="menus_card animate__animated animate__fadeIn pt-2 pt-0 p-lg-3"
+      >
+        <b-col cols="12">
+          <button
+            @click="changeDisplaymenu(1)"
+            class="btn_setting mt-3 mt-lg-2 mb-3 mb-lg-4"
+          >
+            <b-icon icon="gear" class="pr-4" variant="white"></b-icon> Settings
+          </button>
+        </b-col>
+        <b-col cols="12">
+          <button
+            @click="changeDisplaymenu(2)"
+            class="btn_account mb-3 mb-lg-4"
+          >
+            <b-icon icon="person" class="pr-4" variant="white"></b-icon>
+            Contacts
+          </button>
+        </b-col>
+        <b-col cols="12">
+          <button
+            @click="$bvModal.show('modal_addfriend')"
+            class="btn_invitefriend mb-3 mb-lg-4"
+          >
+            <b-icon icon="person-plus" class="pr-4" variant="white"></b-icon>
+            Invite Friends
+          </button>
+        </b-col>
+        <b-col cols="12">
+          <button
+            @click="changeDisplaymenu(4)"
+            class="btn_chatusfaq mb-3 mb-lg-4"
+          >
+            <b-icon
+              icon="question-circle"
+              class="pr-4"
+              variant="white"
+            ></b-icon>
+            Chat.us FAQ
+          </button>
+        </b-col>
+        <b-col cols="12">
+          <button @click="handleLogout" class="btn_logout">
+            <b-icon
+              icon="door-closed-fill"
+              class="pr-4"
+              variant="white"
+            ></b-icon>
+            Log Out
+          </button>
+        </b-col>
+      </div>
+      <!-- ================================================== -->
       <!-- Modal Add Friend -->
       <Modaladdfriend />
       <!-- ================== -->
@@ -82,14 +137,12 @@
 <script>
 import moment from 'moment'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import Menus from './menus'
 import Modaladdfriend from './modalAddfriend'
 import io from 'socket.io-client'
 
 export default {
   name: 'sideProfile',
   components: {
-    Menus,
     Modaladdfriend
   },
   data() {
@@ -99,32 +152,48 @@ export default {
       }),
       showMenu: 0,
       enviro: process.env.VUE_APP_URL_IMAGE,
-      room: '',
       oldRoom: ''
     }
   },
   created() {
+    this.socket.on('chatMessage', data => {
+      setTimeout(() => {
+        const form = {
+          iduser: this.Id,
+          idRoom: data.room
+        }
+        this.readingChat(form).then(() => {
+          this.GetRoomList(this.Id)
+        })
+        this.GetRoomList(this.Id)
+      }, 100)
+      setTimeout(() => {
+        if (data.chat_text) {
+          this.setSocketchat(data)
+        }
+      }, 200)
+    })
     const form = {
       userEmail: this.Myemail
     }
+    if (this.rooms) {
+      this.socket.emit('joinRoom', {
+        room: this.rooms
+      })
+      this.oldRoom = this.rooms
+    }
     this.getDataUser(form)
     this.GetRoomList(this.Id)
-    this.socket.on('chatMessage', data => {
-      if (data.chat_text) {
-        this.setSocketchat(data)
-      } else if (data.notif) {
-        this.$toasted.success('New message from ' + data.username, {
-          duration: 1000
-        })
-      }
-    })
     this.socket.on('typingMessage', data => {
       this.typingMessage(data)
     })
-    this.socket.emit('joinRoom', {
-      username: this.userName,
-      room: this.Id
-    })
+    if (this.turnOnNotif === false) {
+      this.socket.emit('joinRoom', {
+        username: this.userName,
+        room: this.Id
+      })
+    }
+    this.onNotif()
   },
   computed: {
     ...mapGetters({
@@ -132,16 +201,31 @@ export default {
       Myemail: 'getEmail',
       Id: 'getId',
       listRoom: 'getRoom',
-      userName: 'getUsername'
+      userName: 'getUsername',
+      rooms: 'getRooms',
+      turnOnNotif: 'getTurnOnNotif'
     })
   },
   methods: {
-    ...mapActions(['getDataUser', 'GetRoomList', 'getChat']),
+    ...mapActions([
+      'getDataUser',
+      'GetRoomList',
+      'getChat',
+      'logout',
+      'getDataUser',
+      'readingChat'
+    ]),
     ...mapMutations([
       'setRoomDisplay',
       'setSocketchat',
       'setDisplayChat',
-      'typingMessage'
+      'typingMessage',
+      'Roomset',
+      'changeDisplay',
+      'setCoordinate',
+      'setErrorChat',
+      'clearRoom',
+      'onNotif'
     ]),
     showMenus() {
       if (this.showMenu === 0) {
@@ -149,6 +233,38 @@ export default {
       } else {
         this.showMenu = 0
       }
+    },
+    changeDisplaymenu(event) {
+      if (event === 2) {
+        this.socket.emit('leaveRoom', {
+          room: this.rooms
+        })
+        this.changeDisplay(event)
+      } else {
+        this.changeDisplay(event)
+      }
+      const form = {
+        userEmail: this.Myemail
+      }
+      this.getDataUser(form).then(result => {
+        const setData = {
+          lat: Number(result.data.data[0].lat),
+          lng: Number(result.data.data[0].long)
+        }
+        this.setCoordinate(setData)
+      })
+    },
+    handleLogout() {
+      this.socket.emit('leaveRoom', {
+        username: this.userName,
+        room: this.Id
+      })
+      this.socket.emit('leaveRoom', {
+        room: this.rooms
+      })
+      this.setErrorChat()
+      this.clearRoom()
+      this.logout()
     },
     formatTime(value) {
       moment.locale('ID')
@@ -162,6 +278,7 @@ export default {
       }
     },
     roomGet(data) {
+      this.Roomset(data.room_id)
       if (this.oldRoom) {
         this.socket.emit('changeRoom', {
           room: data.room_id,
@@ -174,6 +291,13 @@ export default {
         })
         this.oldRoom = data.room_id
       }
+      const form = {
+        iduser: this.Id,
+        idRoom: data.room_id
+      }
+      this.getChat(form).then(() => {
+        this.GetRoomList(this.Id)
+      })
       const setUserDislay = {
         userName: data.username,
         phoneNumber: data.phone_number,
@@ -184,12 +308,7 @@ export default {
         email: data.user_email
       }
       this.setRoomDisplay(setUserDislay)
-      const form = {
-        iduser: this.Id,
-        idRoom: data.room_id
-      }
-      this.getChat(form)
-      this.GetRoomList(this.Id)
+
       this.setDisplayChat(1)
     }
   }
@@ -289,5 +408,49 @@ input[type='text'] {
   border-radius: 50%;
   background: #7e98df;
   color: white;
+}
+
+/* Menus */
+.menus_card {
+  top: 55px;
+  right: 25px;
+  width: 210px;
+  height: 270px;
+  z-index: 1;
+  background: #7e98df;
+  border-radius: 35px 10px 35px 35px;
+  position: absolute;
+}
+.btn_setting,
+.btn_account,
+.btn_invitefriend,
+.btn_chatusfaq,
+.btn_logout {
+  outline: none;
+  width: 100%;
+  border: none;
+  color: #ffffff;
+  font-family: 'Rubik', sans-serif;
+  background: none;
+  text-align: left;
+}
+.btn_setting,
+.btn_account,
+.btn_invitefriend,
+.btn_chatusfaq {
+  border-bottom: 1px solid;
+}
+
+@media (max-width: 576px) {
+  .menus_card {
+    top: 55px;
+    right: 25px;
+    width: 210px;
+    height: 240px;
+    z-index: 1;
+    background: #7e98df;
+    border-radius: 35px 10px 35px 35px;
+    position: absolute;
+  }
 }
 </style>

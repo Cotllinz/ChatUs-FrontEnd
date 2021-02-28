@@ -173,6 +173,7 @@ export default {
           idChat_recaiver: this.Droom.id,
           chat_text: this.message
         }
+        
         this.socket.emit('roomMessage', setDataToSocket)
         this.postChat(setDataToDatabase).then(() => {
           this.GetRoomList(this.Id)

@@ -123,7 +123,6 @@ export default {
         path: '/api2/socket.io'
       }),
       enviro: process.env.VUE_APP_URL_IMAGE,
-      room: '',
       oldRoom: ''
     }
   },
@@ -133,7 +132,8 @@ export default {
       Id: 'getId',
       Myemail: 'getEmail',
       contact: 'getContacts',
-      reqFriend: 'getReqFriend'
+      reqFriend: 'getReqFriend',
+      rooms: 'getRooms'
     })
   },
   created() {
@@ -150,6 +150,11 @@ export default {
         }
       })
     this.socket.on('chatMessage', data => {
+      const form = {
+        iduser: this.Id,
+        idRoom: data.room
+      }
+      this.readingChat(form)
       if (data.chat_text) {
         this.setSocketchat(data)
       } else if (data.notif) {
@@ -158,6 +163,13 @@ export default {
         })
       }
     })
+    if (this.rooms) {
+      this.socket.emit('joinRoom', {
+        room: this.rooms
+      })
+      this.oldRoom = this.rooms
+    }
+
     this.socket.on('typingMessage', data => {
       this.typingMessage(data)
     })
@@ -170,7 +182,8 @@ export default {
       'setDisplayChat',
       'setSocketchat',
       'setErrorChat',
-      'typingMessage'
+      'typingMessage',
+      'Roomset'
     ]),
     ...mapActions([
       'getContact',
@@ -179,10 +192,14 @@ export default {
       'getFriendRequest',
       'AcceptFriend',
       'createRoom',
-      'getChat'
+      'getChat',
+      'readingChat'
     ]),
     backDisplayhome() {
       this.changeDisplay(0)
+      this.socket.emit('leaveRoom', {
+        room: this.rooms
+      })
     },
     handleRemoveFriend(event) {
       this.alertDelete().then(res => {
@@ -247,6 +264,7 @@ export default {
       }
       this.createRoom(form).then(result => {
         if (result.data.massage === 'Success Create Room') {
+          this.Roomset(result.data.data.room_id)
           if (this.oldRoom) {
             this.socket.emit('changeRoom', {
               room: result.data.data.room_id,
@@ -282,6 +300,7 @@ export default {
             })
           this.setDisplayChat(1)
         } else if (result.data.massage === 'Success Get Old Room') {
+          this.Roomset(result.data.data[0].room_id)
           if (this.oldRoom) {
             this.socket.emit('changeRoom', {
               room: result.data.data[0].room_id,
